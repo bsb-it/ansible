@@ -1,1 +1,23 @@
+---
+#Install updates on Fileserver group paralell
 
+- name: Windows Updates Status
+  hosts: all_win_servers
+  serial: 3
+  #  strategy: free
+  tasks:
+
+    - name: Search-only, return list of found updates (if any)
+      ansible.windows.win_updates:
+        category_names:
+          - CriticalUpdates
+          - SecurityUpdates
+          - UpdateRollups
+          - Updates
+        state: searched
+        reboot: no
+      register: win_updates
+
+    - name: print variable
+      debug:
+        msg: '{{ win_updates.updates }}'
