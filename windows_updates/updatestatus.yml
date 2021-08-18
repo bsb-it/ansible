@@ -2,8 +2,8 @@
 #Install updates on Fileserver group paralell
 
 - name: Windows Updates Status
-  hosts: all_win_servers
-  serial: 3
+  hosts: local
+  serial: 5
   #  strategy: free
   tasks:
 
