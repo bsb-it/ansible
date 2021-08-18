@@ -2,7 +2,7 @@
 #Install updates on Fileserver group paralell
 
 - name: Windows-Updates mit VMware-Snapshot
-  hosts: acmpms01
+  hosts: local
   serial: 1
   #  strategy: free
   tasks:
