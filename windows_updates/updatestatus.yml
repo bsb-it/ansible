@@ -3,7 +3,7 @@
 # 5 server parallel
 
 - name: Windows Updates Status
-  hosts: local
+  hosts: all
   serial: 5
   #  strategy: free
   tasks:
