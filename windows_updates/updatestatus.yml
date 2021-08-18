@@ -1,5 +1,6 @@
 ---
-#Install updates on Fileserver group paralell
+# Show Status Windows Updates
+# 5 server parallel
 
 - name: Windows Updates Status
   hosts: local
