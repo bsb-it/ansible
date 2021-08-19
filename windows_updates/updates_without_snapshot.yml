@@ -5,7 +5,7 @@
 
 - name: Windows-Updates mit VMware-Snapshot
   hosts:
-    - WSUS01
+    - all
   serial:
     - 1
   #  strategy: free
