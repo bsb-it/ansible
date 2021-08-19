@@ -47,5 +47,9 @@
 #        # attach: /tmp/ansible_{{ inventory_hostname }}.txt
 #        body: "System has been successfully provisioned."
 
-    - name: Show Update-Logfile
-      debug: msg="{{lookup('file', '/tmp/ansible_{{ inventory_hostname }}.txt') }}"
+ #   - name: Show Update-Logfile
+ #     debug: msg="{{lookup('file', '/tmp/ansible_{{ inventory_hostname }}.txt') }}"
+
+    - name: print variable
+      debug:
+        msg: '{{ update_result }}'
