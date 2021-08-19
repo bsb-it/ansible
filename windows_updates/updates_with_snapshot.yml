@@ -1,5 +1,7 @@
 ---
-#Install updates on Fileserver group paralell
+# Install updates on Windows-Server
+# Erstellung VMware-Snapshot
+# Abarbeitung nacheinander, nicht parallel
 
 - name: Windows-Updates mit VMware-Snapshot
   hosts:
