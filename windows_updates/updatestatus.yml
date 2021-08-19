@@ -2,9 +2,18 @@
 # Show Status Windows Updates
 
 - name: Windows Updates Status
-  hosts: all
-  # serial: 1
-  # strategy: linear
+  hosts:
+    - NAVSQL01
+    - NAVPRD01
+    - NAVPRD02
+    - NAVPRD03
+    - NAVDEV01
+    - NAVMGMT01
+  serial:
+    - 1
+    - 3
+    - 2
+  
   tasks:
 
     - name: Search-only, return list of found updates (if any)
