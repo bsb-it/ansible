@@ -3,16 +3,9 @@
 
 - name: Windows Updates Status
   hosts:
-    - NAVSQL01
-    - NAVPRD01
-    - NAVPRD02
-    - NAVPRD03
-    - NAVDEV01
-    - NAVMGMT01
+    - all
   serial:
-    - 1
-    - 3
-    - 2
+    - 5
   
   tasks:
 
