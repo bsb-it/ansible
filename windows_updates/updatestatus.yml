@@ -1,11 +1,10 @@
 ---
 # Show Status Windows Updates
-# 1 server parallel
 
 - name: Windows Updates Status
   hosts: all
-  serial: 1
-  strategy: linear
+  # serial: 1
+  # strategy: linear
   tasks:
 
     - name: Search-only, return list of found updates (if any)
