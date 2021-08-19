@@ -2,9 +2,12 @@
 #Install updates on Fileserver group paralell
 
 - name: Windows-Updates mit VMware-Snapshot
-  hosts: local
-  serial: 1
+  hosts:
+    - all
+  serial:
+    - 1
   #  strategy: free
+  
   tasks:
     - name: Create a snapshot, auf Gross/Kleinschreibung des Hostnamen achten
       community.vmware.vmware_guest_snapshot:
