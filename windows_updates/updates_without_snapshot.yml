@@ -47,7 +47,5 @@
 #        # attach: /tmp/ansible_{{ inventory_hostname }}.txt
 #        body: "System has been successfully provisioned."
 
-    - name: Example playbook sending mail to root
-      community.general.mail:
-        subject: System {{ ansible_hostname }} has been successfully provisioned.
-      delegate_to: 127.0.0.1
+    - name: Show Update-Logfile
+      debug: msg="{{lookup('file', '/tmp/ansible_{{ inventory_hostname }}.txt') }}"
