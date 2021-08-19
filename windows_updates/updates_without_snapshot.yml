@@ -11,10 +11,6 @@
   #  strategy: free
   
   tasks:
-    - name: Logfile auf Remote Server loeschen
-      ansible.windows.win_file:
-        path: C:/ansible_{{ inventory_hostname }}.txt
-        state: absent
 
     - name: search and install updates und Logfile schreiben
       win_updates:
@@ -28,27 +24,6 @@
         reboot_timeout: 1200
         log_path: c:\ansible_{{ inventory_hostname }}.txt
       register: update_result
-
-    - name: Update-Log abholen
-      fetch:
-        src: C:/ansible_{{ inventory_hostname }}.txt
-        dest: /tmp/
-        flat: yes
-      register: update_result
-
-#    - name: Update-Status per Mail
-#      community.general.mail:
-#        host: localhost
-#        port: 25
-#        # to: "{{ mail_to }}"
-#        to: "karl.grosse.vogelsang@bsb-buchstelle.de"
-#        subject: "Ansible Report"
-#        # {{ ansible_hostname }}
-#        # attach: /tmp/ansible_{{ inventory_hostname }}.txt
-#        body: "System has been successfully provisioned."
-
- #   - name: Show Update-Logfile
- #     debug: msg="{{lookup('file', '/tmp/ansible_{{ inventory_hostname }}.txt') }}"
 
     - name: print variable
       debug:
