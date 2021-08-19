@@ -47,10 +47,7 @@
 #        # attach: /tmp/ansible_{{ inventory_hostname }}.txt
 #        body: "System has been successfully provisioned."
 
-
-    - name: send email
-      local_action:
-        module: mail
-        subject: "ansible sent this"
-        to: "Karl <karl.grosse.vogelsang@bsb-buchstelle.de>"
-        body: "this is the body"
+    - name: Example playbook sending mail to root
+      community.general.mail:
+        subject: System {{ ansible_hostname }} has been successfully provisioned.
+      delegate_to: localhost
