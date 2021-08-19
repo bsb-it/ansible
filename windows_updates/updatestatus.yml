@@ -1,10 +1,10 @@
 ---
 # Show Status Windows Updates
-# 5 server parallel
+# 1 server parallel
 
 - name: Windows Updates Status
   hosts: all
-  serial: 5
+  serial: 1
   #  strategy: free
   tasks:
 
