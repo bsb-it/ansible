@@ -3,7 +3,7 @@
 # Kein VMware-Snapshot
 # Abarbeitung nacheinander, nicht parallel
 
-- name: Windows-Updates mit VMware-Snapshot
+- name: Windows-Updates ohne VMware-Snapshot
   hosts:
     - all
   serial:
