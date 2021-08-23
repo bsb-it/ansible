@@ -1,0 +1,25 @@
+---
+# Delete Snapshot with name "snap_ansible"
+# Abarbeitung Seriell
+# 1 Server pro Schritt
+
+- name: Windows-Updates mit VMware-Snapshot
+  hosts:
+    - all
+  serial:
+    - 1
+  #  strategy: free
+  
+  tasks:
+    - name: Delete Snapshot "snap_ansible"
+      community.vmware.vmware_guest_snapshot:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        datacenter: "{{ datacenter_name }}"
+        folder: /
+        name: "{{ inventory_hostname_short }}"
+        state: absent
+        snapshot_name: snap_ansible
+      delegate_to: localhost
