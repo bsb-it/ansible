@@ -6,6 +6,7 @@
     - all
   serial:
     - 5
+  gather_facts: no
   
   tasks:
 
