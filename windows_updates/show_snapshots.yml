@@ -18,7 +18,7 @@
         password: "{{ vcenter_password }}"
         validate_certs: false
         datacenter: "{{ datacenter_name }}"
-        folder: "/{{ datacenter_name }}/vm/"
+        folder: /
         name: "{{ guest_name }}"
       delegate_to: localhost
       register: snapshot_info
