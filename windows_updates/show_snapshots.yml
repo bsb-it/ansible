@@ -25,4 +25,4 @@
       
     - name: print variable
       debug:
-        msg: '{{ snapshot_info.guest_snapshots.snapshots }}'
+        msg: '{{ snapshot_info.guest_snapshots }}'
