@@ -10,14 +10,15 @@
     - 1
   strategy: free
 
-- name: Gather snapshot information about the virtual machine in the given vCenter
-  community.vmware.vmware_guest_snapshot_info:
-    hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
-    password: "{{ vcenter_password }}"
-    validate_certs: false
-    datacenter: "{{ datacenter_name }}"
-    folder: "/{{ datacenter_name }}/vm/"
-    name: "{{ guest_name }}"
-  delegate_to: localhost
-  register: snapshot_info
+  tasks:
+    - name: Gather snapshot information about the virtual machine in the given vCenter
+      community.vmware.vmware_guest_snapshot_info:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        datacenter: "{{ datacenter_name }}"
+        folder: "/{{ datacenter_name }}/vm/"
+        name: "{{ guest_name }}"
+      delegate_to: localhost
+      register: snapshot_info
