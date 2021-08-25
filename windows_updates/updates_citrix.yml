@@ -6,7 +6,7 @@
   hosts:
     - all
   serial:
-    - 3
+    - 1
   #  strategy: free
   
   tasks:
