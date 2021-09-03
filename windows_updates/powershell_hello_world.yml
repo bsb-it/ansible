@@ -26,4 +26,4 @@
           echo "Hello world"
       when:
         - openfiles.changed
-        - ansible_date_time_hour < 6
+        - ansible_date_time.hour < 6
