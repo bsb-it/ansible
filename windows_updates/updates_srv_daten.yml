@@ -1,0 +1,38 @@
+---
+# Install updates on Windows-Server
+# Kein VMware-Snapshot
+# Abarbeitung nacheinander, nicht parallel
+
+- name: Windows-Updates ohne VMware-Snapshot
+  hosts:
+    - all
+  serial:
+    - 1
+  #  strategy: free
+  
+  tasks:
+    - name: Run basic PowerShell script
+      ansible.windows.win_powershell:
+        script: |
+          Get-SmbOpenfile
+      register: openfiles
+      
+    - name: search and install updates und Logfile schreiben
+      win_updates:
+        category_names:
+          - CriticalUpdates
+          - SecurityUpdates
+          - UpdateRollups
+          - Updates
+            #state: searched
+        reboot: yes
+        reboot_timeout: 1200
+        log_path: c:\ansible_{{ inventory_hostname }}.txt
+      when:
+        - not openfiles.changed
+        - ansible_date_time.hour | int < 5
+      register: update_result
+
+    - name: print variable
+      debug:
+        msg: '{{ update_result }}'
