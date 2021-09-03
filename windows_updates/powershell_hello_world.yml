@@ -14,3 +14,10 @@
       ansible.windows.win_powershell:
         script: |
           Get-SmbOpenfile
+      register: openfiles
+      
+    - name: Echo Hello World
+      ansible.windows.win_powershell:
+        script: |
+          echo "Hello world"
+      when: openfiles.changed
