@@ -10,6 +10,10 @@
   # gather_facts: no
 
   tasks:
+    - name: Get time
+      debug:
+        var=ansible_date_time.hour
+    
     - name: Run basic PowerShell script
       ansible.windows.win_powershell:
         script: |
@@ -20,4 +24,6 @@
       ansible.windows.win_powershell:
         script: |
           echo "Hello world"
-      when: not openfiles.changed
+      when:
+        - not openfiles.changed
+        - ansible_date_time_hour < 6
