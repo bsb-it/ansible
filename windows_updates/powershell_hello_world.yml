@@ -21,5 +21,5 @@
         script: |
           echo "Hello world"
       when:
-        - openfiles.output != "[]"
+        - openfiles.output == "[]"
         - ansible_date_time.hour | int < 16
