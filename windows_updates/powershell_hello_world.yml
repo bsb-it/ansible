@@ -22,4 +22,4 @@
           echo "Hello world"
       when:
         - openfiles.changed
-        - ansible_date_time.hour | int < 13
+        - ansible_date_time.hour | int < 6
