@@ -6,6 +6,7 @@
 - name: Windows-Updates ohne VMware-Snapshot
   hosts:
     - all
+  order: shuffle
   serial:
     - 1
   #  strategy: free
