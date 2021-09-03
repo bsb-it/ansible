@@ -10,10 +10,6 @@
   # gather_facts: no
 
   tasks:
-    - name: Get time
-      debug:
-        var=ansible_date_time.hour
-    
     - name: Run basic PowerShell script
       ansible.windows.win_powershell:
         script: |
