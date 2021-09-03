@@ -20,4 +20,4 @@
       ansible.windows.win_powershell:
         script: |
           echo "Hello world"
-      when: openfiles.changed
+      when: not openfiles.changed
