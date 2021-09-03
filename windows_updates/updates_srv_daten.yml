@@ -11,7 +11,7 @@
   #  strategy: free
   
   tasks:
-    - name: Run basic PowerShell script
+    - name: Suche offene Dateien in Dateifreigaben
       ansible.windows.win_powershell:
         script: |
           Get-SmbOpenfile
