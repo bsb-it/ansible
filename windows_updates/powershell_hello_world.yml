@@ -25,5 +25,5 @@
         script: |
           echo "Hello world"
       when:
-        - not openfiles.changed
+        - openfiles.changed
         - ansible_date_time_hour < 6
