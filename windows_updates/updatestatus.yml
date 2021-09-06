@@ -6,7 +6,6 @@
     - all
   serial:
     - 5
-  strategy: free
   gather_facts: no
   
   tasks:
