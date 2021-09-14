@@ -3,12 +3,13 @@
 # Abarbeitung Seriell
 # 1 Server pro Schritt
 
-- name: Windows-Updates mit VMware-Snapshot
+- name: Delete VMware-Snapshots
   hosts:
     - all
   serial:
     - 1
   #  strategy: free
+  gather_facts: no
   
   tasks:
     - name: Delete Snapshot "snap_ansible"
