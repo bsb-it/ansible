@@ -13,9 +13,9 @@
   tasks:
     - name: Create a snapshot, auf Gross/Kleinschreibung des Hostnamen achten
       community.vmware.vmware_guest_snapshot:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
+        hostname: "{{ VMWARE_HOST }}"
+        username: "{{ VMWARE_USER }}"
+        password: "{{ VMWARE_PASSWORD }}"
         validate_certs: false
         datacenter: "{{ datacenter_name }}"
         folder: /
