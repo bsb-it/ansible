@@ -15,7 +15,7 @@
       community.vmware.vmware_guest_snapshot:
         hostname: '{{ lookup("env", "VMWARE_HOST") }}'
         username: '{{ lookup("env", "VMWARE_USER") }}'
-        password: "{{ VMWARE_PASSWORD }}"
+        password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
         validate_certs: false
         datacenter: "{{ datacenter_name }}"
         folder: /
