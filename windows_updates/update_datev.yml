@@ -10,10 +10,8 @@
     - BSBDTV003
     - BSBKDTV001
     - BSBKDTV002
-    - WTSSERVICE001
-    - EDVMGTMT001
   serial:
-    - 3
+    - 1
     - 2
     - 2
   #  strategy: free
