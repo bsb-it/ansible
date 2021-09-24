@@ -15,4 +15,6 @@
         script: |
           $app = Get-BrokerApplication -ApplicationName "WLV NAV Test"
           Set-BrokerApplication -InputObject $app -Enabled $true -Visible $true
+          $app = Get-BrokerApplication -ApplicationName "WLV NAV"
+          Set-BrokerApplication -InputObject $app -Enabled $true -Visible $true
       register: citrixapp
