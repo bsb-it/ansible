@@ -13,5 +13,6 @@
     - name: PowerShell script
       ansible.windows.win_powershell:
         script: |
-          Get-BrokerApplication
+          $app = Get-BrokerApplication -ApplicationName Editor
+          Set-BrokerApplication -InputObject $app -Enabled $false -Visible $false
       register: citrixapp
