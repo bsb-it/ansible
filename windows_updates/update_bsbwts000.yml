@@ -1,0 +1,55 @@
+---
+# Install updates on Windows-Server
+# Erstellung VMware-Snapshot
+# Abarbeitung nacheinander, nicht parallel
+
+- name: Windows-Updates mit VMware-Snapshot
+  hosts:
+    - all
+  serial:
+    - 1
+  #  strategy: free
+  
+  tasks:
+    - name: Create a snapshot, auf Gross/Kleinschreibung des Hostnamen achten
+      community.vmware.vmware_guest_snapshot:
+        hostname: '{{ lookup("env", "VMWARE_HOST") }}'
+        username: '{{ lookup("env", "VMWARE_USER") }}'
+        password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
+        validate_certs: false
+        datacenter: "{{ datacenter_name }}"
+        folder: /
+        name: "{{ inventory_hostname_short }}"
+        state: present
+        snapshot_name: snap_ansible
+        description: Snapshot_von_Ansible
+      delegate_to: localhost
+
+    - name: Start Windows-Update-Dienst
+      ansible.windows.win_service:
+        name: wuauserv
+        start_mode: manual
+        state: started
+
+    - name: search and install updates und Logfile schreiben
+      win_updates:
+        category_names:
+          - CriticalUpdates
+          - SecurityUpdates
+          - UpdateRollups
+          - Updates
+            #state: searched
+        reboot: yes
+        reboot_timeout: 1200
+        log_path: c:\ansible_{{ inventory_hostname }}.txt
+      register: update_result
+
+    - name: Stop Windows-Update-Dienst
+      ansible.windows.win_service:
+        name: wuauserv
+        start_mode: disabled
+        state: stopped
+
+    - name: print variable
+      debug:
+        msg: '{{ update_result }}'
