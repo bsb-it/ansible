@@ -14,7 +14,7 @@
       ansible.windows.win_powershell:
         script: |
           $app = Get-BrokerApplication -ApplicationName "WLV NAV Test"
-          Set-BrokerApplication -InputObject $app -Enabled $false -Visible $false
+          Set-BrokerApplication -InputObject $app -Enabled $false
           $app = Get-BrokerApplication -ApplicationName "WLV NAV"
-          Set-BrokerApplication -InputObject $app -Enabled $false -Visible $false
+          Set-BrokerApplication -InputObject $app -Enabled $false
       register: citrixapp
