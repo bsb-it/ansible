@@ -1,0 +1,10 @@
+---
+ - name:Playbook to Patch Linux Server  
+   hosts: all
+   gather_facts: no
+   tasks:
+     - name: Upgrade all packages exluding JAVA & HTTPD
+       yum: 
+         name: '*'
+         exclude: java*,httpd*
+         state: latest
