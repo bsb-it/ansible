@@ -1,25 +1,39 @@
 ---
- - name: Playbook to Patch Linux Server  
-   hosts: all
-   gather_facts: no
-   tasks:
+- name: Playbook to Patch Linux Server  
+  hosts: all
+  gather_facts: no
+  tasks:
 
-     - name: Update apt-get repo and cache
-       apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+  - name: Create a snapshot, auf Gross/Kleinschreibung des Hostnamen achten
+      community.vmware.vmware_guest_snapshot:
+        hostname: '{{ lookup("env", "VMWARE_HOST") }}'
+        username: '{{ lookup("env", "VMWARE_USER") }}'
+        password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
+        validate_certs: false
+        datacenter: "{{ datacenter_name }}"
+        folder: /
+        name: "{{ inventory_hostname_short }}"
+        state: present
+        snapshot_name: snap_ansible
+        description: Snapshot_von_Ansible
+      delegate_to: localhost
+
+    - name: Update apt-get repo and cache
+      apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
        
-     - name: Upgrade all apt packages
-       apt: upgrade=dist force_apt_get=yes
+    - name: Upgrade all apt packages
+      apt: upgrade=dist force_apt_get=yes
       
-     - name: Check if a reboot is needed for Debian and Ubuntu boxes
-       register: reboot_required_file
-       stat: path=/run/reboot-required get_md5=no
+    - name: Check if a reboot is needed for Debian and Ubuntu boxes
+      register: reboot_required_file
+      stat: path=/run/reboot-required get_md5=no
 
-     - name: Reboot the Debian or Ubuntu server
-       reboot:
-         msg: "Reboot initiated by Ansible due to kernel updates"
-         connect_timeout: 5
-         reboot_timeout: 300
-         pre_reboot_delay: 0
-         post_reboot_delay: 30
-         test_command: uptime
-       when: reboot_required_file.stat.exists
+    - name: Reboot the Debian or Ubuntu server
+      reboot:
+        msg: "Reboot initiated by Ansible due to kernel updates"
+        connect_timeout: 5
+        reboot_timeout: 300
+        pre_reboot_delay: 0
+        post_reboot_delay: 30
+        test_command: uptime
+      when: reboot_required_file.stat.exists
