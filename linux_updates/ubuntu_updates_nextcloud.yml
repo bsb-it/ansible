@@ -4,7 +4,7 @@
   gather_facts: no
   tasks:
 
-  - name: Create a snapshot, auf Gross/Kleinschreibung des Hostnamen achten
+    - name: Create a snapshot, auf Gross/Kleinschreibung des Hostnamen achten
       community.vmware.vmware_guest_snapshot:
         hostname: '{{ lookup("env", "VMWARE_HOST") }}'
         username: '{{ lookup("env", "VMWARE_USER") }}'
