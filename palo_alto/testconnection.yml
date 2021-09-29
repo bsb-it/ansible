@@ -1,3 +1,4 @@
+---
 - name: Demonstrate how to use OP module to execute various op commands on PANW device
   hosts: all
   connection: local
@@ -7,7 +8,7 @@
   #  - paloaltonetworks.panos
 
   tasks:
-    - name: Show all interfaces using ('show interface all')
+    - name: Show all interfaces using
       panos_op:
         ip_address: '{{ 192.168.51.250 }}'
         username: '{{ username }}'
