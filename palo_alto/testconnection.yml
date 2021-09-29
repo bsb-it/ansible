@@ -7,13 +7,13 @@
     - paloaltonetworks.panos
 
   tasks:
-  - name: Show all interfaces using ('show interface all')
-    panos_op:
-      ip_address: '{{ 192.168.51.250 }}'
-      username: '{{ username }}'
-      password: '{{ password }}'
-      cmd: "show interface all"
-    register: result
+    - name: Show all interfaces using ('show interface all')
+      panos_op:
+        ip_address: '{{ 192.168.51.250 }}'
+        username: '{{ username }}'
+        password: '{{ password }}'
+        cmd: "show interface all"
+      register: result
 
-  - name: returned output in the default JSON format
-    debug: msg='{{ result.stdout }}'
+    - name: returned output in the default JSON format
+      debug: msg='{{ result.stdout }}'
