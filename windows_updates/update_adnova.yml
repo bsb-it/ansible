@@ -9,7 +9,6 @@
     - BSBADF002
     - BSBKADF001
   serial:
-    - 3
     - 1
   #  strategy: free
   
