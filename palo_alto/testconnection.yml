@@ -3,8 +3,8 @@
   connection: local
   gather_facts: False
 
-  collections:
-    - paloaltonetworks.panos
+  # collections:
+  #  - paloaltonetworks.panos
 
   tasks:
     - name: Show all interfaces using ('show interface all')
