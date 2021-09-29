@@ -1,10 +1,10 @@
 - name: Demonstrate how to use OP module to execute various op commands on PANW device
-  hosts: my-firewall
+  hosts: all
   connection: local
   gather_facts: False
 
-  roles:
-    - role: PaloAltoNetworks.paloaltonetworks
+  collections:
+    - paloaltonetworks.panos
 
   tasks:
   - include_vars: 'firewall-secrets.yml'
