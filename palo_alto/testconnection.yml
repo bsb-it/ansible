@@ -7,9 +7,6 @@
     - paloaltonetworks.panos
 
   tasks:
-  - include_vars: 'firewall-secrets.yml'
-    no_log: 'yes'
-
   - name: Show all interfaces using ('show interface all')
     panos_op:
       ip_address: '{{ ip_address }}'
