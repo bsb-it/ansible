@@ -1,8 +1,7 @@
 ---
 - name: Demonstrate how to use OP module to execute various op commands on PANW device
   hosts: all
-  connection: local
-  gather_facts: False
+  gather_facts: no
 
   # collections:
   #  - paloaltonetworks.panos
