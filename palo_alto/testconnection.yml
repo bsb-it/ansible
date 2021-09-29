@@ -9,7 +9,7 @@
   tasks:
   - name: Show all interfaces using ('show interface all')
     panos_op:
-      ip_address: '{{ ip_address }}'
+      ip_address: '{{ hostname }}'
       password: '{{ password }}'
       cmd: "show interface all"
     register: result
