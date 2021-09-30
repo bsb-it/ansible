@@ -9,9 +9,9 @@
   tasks:
     - name: Show all interfaces using
       panos_op:
-        ip_address: '{{ ip_address }}'
-        username: '{{ username | default(omit) }}'
-        password: '{{ password | default(omit) }}'
+        ip_address: '{{ lookup("env", "ip_address") }}'
+        username: '{{ lookup("env", "username") | default(omit) }}'
+        password: '{{ lookup("env", "password") | default(omit) }}'
         cmd: "show interface all"
       register: result
 
