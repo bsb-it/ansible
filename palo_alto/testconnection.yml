@@ -1,18 +1,24 @@
 ---
 - name: Demonstrate how to use OP module to execute various op commands on PANW device
   hosts: all
-  gather_facts: no
+  connection: local
+  # gather_facts: no
 
   collections:
     - paloaltonetworks.panos
+    
+  vars:
+    device:
+      ip_address: '{{ ip_address }}'
+      username: '{{ username | default(omit) }}'
+      password: '{{ password | default(omit) }}'
+      api_key: '{{ api_key | default(omit) }}'
 
   tasks:
     - name: Show all interfaces using
       panos_op:
-        ip_address: '{{ lookup("env", "ip_address") }}'
-        username: '{{ lookup("env", "username") | default(omit) }}'
-        password: '{{ lookup("env", "password") | default(omit) }}'
-        cmd: "show interface all"
+        provider: '{{ device }}'
+        cmd: 'show interface all'
       register: result
 
     - name: returned output in the default JSON format
