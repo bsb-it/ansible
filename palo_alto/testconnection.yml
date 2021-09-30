@@ -10,8 +10,8 @@
   vars:
     device:
       ip_address: '{{ ip_address }}'
-      username: '{{ username | default(omit) }}'
-      password: '{{ password | default(omit) }}'
+      username: '{{ ANSIBLE_NET_USERNAME | default(omit) }}'
+      password: '{{ ANSIBLE_NET_PASSWORD | default(omit) }}'
       api_key: '{{ api_key | default(omit) }}'
 
   tasks:
