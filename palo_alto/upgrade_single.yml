@@ -43,8 +43,6 @@
       password: '{{ password | default(omit) }}'
       api_key: '{{ api_key | default(omit) }}'
 
-    sync_to_peer: False
-
     # backup_config - Create a backup of the currently running config.
     backup_config: true
 
@@ -57,15 +55,6 @@
         provider: '{{ device }}'
         cmd: 'save config to {{ backup_filename }}'
       when: backup_config|bool
-
-    - name: Download PAN-OS version
-      paloaltonetworks.panos.panos_software:
-        provider: '{{ device }}'
-        version: '{{ version }}'
-        sync_to_peer: '{{ sync_to_peer }}'
-        download: true
-        install: false
-        restart: false
 
     - name: Install target PAN-OS version
       paloaltonetworks.panos.panos_software:
