@@ -10,8 +10,8 @@
     - name: Show all interfaces using
       panos_op:
         ip_address: '{{ ip_address }}'
-        username: '{{ username }}'
-        password: '{{ password }}'
+        username: '{{ username | default(omit) }}'
+        password: '{{ password | default(omit) }}'
         cmd: "show interface all"
       register: result
 
