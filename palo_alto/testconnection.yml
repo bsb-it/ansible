@@ -12,7 +12,7 @@
       ip_address: '{{ ip_address }}'
       username: '{{ ANSIBLE_NET_USERNAME | default(omit) }}'
       password: '{{ ANSIBLE_NET_PASSWORD | default(omit) }}'
-      api_key: '{{ api_key | default(omit) }}'
+      # api_key: '{{ api_key | default(omit) }}'
 
   tasks:
     - name: Show all interfaces using
