@@ -17,7 +17,7 @@
   tasks:
     - name: set dns and ntp
       panos_mgtconfig:
-        provider: '{{ provider }}'
+        provider: '{{ device }}'
         dns_server_primary: "192.168.56.131"
         dns_server_secondary: "192.168.56.132"
         # panorama_primary: "1.1.1.3"
