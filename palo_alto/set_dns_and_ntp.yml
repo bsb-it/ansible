@@ -1,0 +1,27 @@
+---
+- name: Demonstrate how to use OP module to execute various op commands on PANW device
+  hosts: all
+  connection: local
+  # gather_facts: no
+
+  collections:
+    - paloaltonetworks.panos
+    
+  vars:
+    device:
+      ip_address: '{{ ip_address }}'
+      username: '{{ lookup("env", "ANSIBLE_NET_USERNAME") | default(omit) }}'
+      password: '{{ lookup("env", "ANSIBLE_NET_PASSWORD") | default(omit) }}'
+      api_key: '{{ api_key | default(omit) }}'
+
+  tasks:
+    - name: set dns and ntp
+      panos_mgtconfig:
+        provider: '{{ provider }}'
+        dns_server_primary: "192.168.56.131"
+        dns_server_secondary: "192.168.56.132"
+        # panorama_primary: "1.1.1.3"
+        # panorama_secondary: "1.1.1.4"
+        ntp_server_primary: "192.168.56.132"
+        # ntp_server_secondary: "1.1.1.6"
+      register: result
