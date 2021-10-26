@@ -1,0 +1,28 @@
+---
+# Reboot Windows-Server
+# Erstellung VMware-Snapshot
+
+- name: Windows-Reboot mit VMware-Snapshot
+  hosts:
+    - all
+  serial:
+    - 1
+  #  strategy: free
+  
+  tasks:
+    - name: Create a snapshot, auf Gross/Kleinschreibung des Hostnamen achten
+      community.vmware.vmware_guest_snapshot:
+        hostname: '{{ lookup("env", "VMWARE_HOST") }}'
+        username: '{{ lookup("env", "VMWARE_USER") }}'
+        password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
+        validate_certs: false
+        datacenter: "{{ datacenter_name }}"
+        folder: /
+        name: "{{ inventory_hostname_short }}"
+        state: present
+        snapshot_name: snap_ansible
+        description: Snapshot_von_Ansible
+      delegate_to: localhost
+
+    - name: Reboot Server
+      ansible.windows.win_reboot: 
