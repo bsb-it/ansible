@@ -1,0 +1,19 @@
+---
+# Search User
+
+- name: Search User
+  hosts:
+    - all
+  serial:
+    - 1
+  # strategy: free
+  gather_facts: no
+
+  tasks:
+    - name: PowerShell script
+      ansible.windows.win_powershell:
+        script: |
+          gwmi win32_LogonSession -Filter 'LogonType=2 or LogonType=10' | %{
+          gwmi -Query "Associators of {Win32_LogonSession.LogonId=$($_.LogonId)} Where AssocClass=Win32_LoggedOnUser Role=Dependent" | select -Expand Name
+          }
+      register: userlist
