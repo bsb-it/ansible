@@ -17,3 +17,7 @@
           gwmi -Query "Associators of {Win32_LogonSession.LogonId=$($_.LogonId)} Where AssocClass=Win32_LoggedOnUser Role=Dependent" | select -Expand Name
           }
       register: userlist
+
+    - name: print variable
+      debug:
+        msg: '{{ userlist.output }}'
