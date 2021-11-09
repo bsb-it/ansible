@@ -48,6 +48,8 @@
 
     # backup_filename - Filename for running config backup.
     backup_filename: 'ansible-backup-{{ ansible_date_time.date }}.xml'
+    
+    sync_to_peer: False
 
   tasks:
   
