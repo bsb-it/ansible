@@ -50,6 +50,54 @@
     backup_filename: 'ansible-backup-{{ ansible_date_time.date }}.xml'
 
   tasks:
+  
+    - name: Check latest content
+      paloaltonetworks.panos.panos_op:
+        provider: '{{ device }}'
+        cmd: 'request content upgrade check'
+      register: check
+      changed_when: False
+
+    - name: Download latest content
+      paloaltonetworks.panos.panos_op:
+        provider: '{{ device }}'
+        cmd: |
+          <request><content><upgrade><download>
+          <latest></latest>
+          {% if sync_to_peer %}<sync-to-peer>yes</sync-to-peer>{% endif %}
+          </download></upgrade></content></request>
+        cmd_is_xml: True
+      register: download
+
+    - name: Check content download result
+      paloaltonetworks.panos.panos_op:
+        provider: '{{ device }}'
+        cmd: 'show jobs id {{ (download.stdout | from_json).response.result.job }}'
+      register: download_job
+      until: download_job is not failed and (download_job.stdout | from_json).response.result.job.status == 'FIN'
+      retries: 10
+      delay: 60
+
+    - name: Install latest content
+      paloaltonetworks.panos.panos_op:
+        provider: '{{ device }}'
+        cmd: |
+          <request><content><upgrade><install>
+          <version>latest</version>
+          {% if sync_to_peer %}<sync-to-peer>yes</sync-to-peer>{% endif %}
+          </install></upgrade></content></request>
+        cmd_is_xml: True
+      register: install
+
+    - name: Check content install result
+      paloaltonetworks.panos.panos_op:
+        provider: '{{ device }}'
+        cmd: 'show jobs id {{ (install.stdout | from_json).response.result.job }}'
+      register: install_job
+      until: install_job is not failed and (install_job.stdout | from_json).response.result.job.status == 'FIN'
+      retries: 10
+      delay: 60  
+  
     - name: Backup device config
       paloaltonetworks.panos.panos_op:
         provider: '{{ device }}'
