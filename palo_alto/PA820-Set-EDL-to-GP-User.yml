@@ -24,8 +24,7 @@
       set_fact:
         teams_routes: '{{ lookup("file", "/var/tmp/ms365_list.txt").splitlines() }}'
 
-    ####################### gp-gw-ssl-user - VPN-Remote-SSL #######################
-    ###############################################################################
+    # gp-gw-ssl-user - VPN-Remote-SSL 
 
     - name: Delete GlobalProtect Gateway Config - gp-gw-ssl-user - VPN-Remote-SSL
       paloaltonetworks.panos.panos_type_cmd:
@@ -83,8 +82,7 @@
           <no-direct-access-to-local-network>no</no-direct-access-to-local-network>
         </entry>
 
-    ####################### cisco-user-gw - VPN-Remote #######################
-    ###############################################################################
+    # cisco-user-gw - VPN-Remote
 
     - name: Delete GlobalProtect Gateway Config - gp-gw-ssl-user - VPN-Remote-SSL
       paloaltonetworks.panos.panos_type_cmd:
@@ -126,8 +124,7 @@
           <no-direct-access-to-local-network>no</no-direct-access-to-local-network>
         </entry>
 
-    ####################### cisco-user-gw - VPN Remoteadmin #######################
-    ###############################################################################
+    # cisco-user-gw - VPN Remoteadmin
 
     - name: Delete GlobalProtect Gateway Config - cisco-user-gw - VPN Remoteadmin
       paloaltonetworks.panos.panos_type_cmd:
@@ -169,8 +166,7 @@
           <no-direct-access-to-local-network>no</no-direct-access-to-local-network>
         </entry>
 
-    ####################### cisco-user-gw - VPN kzvdev #######################
-    ###############################################################################
+    # cisco-user-gw - VPN kzvdev
 
     - name: Delete GlobalProtect Gateway Config - cisco-user-gw -  VPN kzvdev
       paloaltonetworks.panos.panos_type_cmd:
