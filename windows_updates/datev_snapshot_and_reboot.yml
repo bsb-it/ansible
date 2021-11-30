@@ -50,7 +50,7 @@
         folder: /
         name: "{{ inventory_hostname_short }}"
         state: present
-        snapshot_name: snap_ansible
+        snapshot_name: snap_ansible_manuell
         description: Snapshot_von_Ansible
       delegate_to: localhost
 
