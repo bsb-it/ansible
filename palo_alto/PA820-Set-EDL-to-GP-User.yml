@@ -207,3 +207,8 @@
             <retrieve-framed-ip-address>no</retrieve-framed-ip-address>
             <no-direct-access-to-local-network>no</no-direct-access-to-local-network>
           </entry>
+
+    - name: commit changes by specified admins to firewall
+      panos_commit:
+        provider: '{{ device }}'
+        admins: ['apiadmin']
