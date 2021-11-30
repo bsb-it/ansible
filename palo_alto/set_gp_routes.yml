@@ -15,15 +15,6 @@
       api_key: '{{ api_key | default(omit) }}'
 
   tasks:
-    - name: Delete GlobalProtect Gateway Config
-      paloaltonetworks.panos.panos_type_cmd:
-        provider: '{{ device }}'
-        cmd: delete
-        xpath: |
-          /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']
-          /global-protect/global-protect-gateway/entry[@name='GlobalProtect Gateway']/remote-user-tunnel-configs/entry[@name='Ansible-Test']
-    # notify: Commit external firewall
-
     - name: Set GlobalProtect Gateway Config
       paloaltonetworks.panos.panos_type_cmd:
         provider: '{{ device }}'
