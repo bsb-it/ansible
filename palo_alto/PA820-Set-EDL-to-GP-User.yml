@@ -42,45 +42,45 @@
           /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']
           /global-protect/global-protect-gateway/entry[@name='gp-gw-ssl-user']/remote-user-tunnel-configs
         element: |
-        <entry name="VPN-Remote-SSL">
-          <split-tunneling>
-            <include-domains>
-              <list/>
-            </include-domains>
-            <exclude-domains>
-              <list/>
-            </exclude-domains>
-            <access-route>
-              <member>0.0.0.0/0</member>
-            </access-route>
-            <exclude-access-route>
-            {% for route in teams_routes %}
-              <member>{{ route }}</member>
-            {% endfor %}
-            </exclude-access-route>
-            <include-applications/>
-            <exclude-applications/>
-          </split-tunneling>
-          <authentication-override>
-            <generate-cookie>no</generate-cookie>
-          </authentication-override>
-          <source-address>
-            <ip-address/>
-            <region/>
-          </source-address>
-          <source-user>
-            <member>cn=gg_sec_ms_vpn-remote_ssl,ou=groups,ou=ms,ou=acwl,ou=organisationen,dc=edvms,dc=local</member>
-          </source-user>
-          <authentication-server-ip-pool/>
-          <ip-pool>
-            <member>172.24.4.2-172.24.4.254</member>
-          </ip-pool>
-          <os>
-            <member>any</member>
-          </os>
-          <retrieve-framed-ip-address>no</retrieve-framed-ip-address>
-          <no-direct-access-to-local-network>no</no-direct-access-to-local-network>
-        </entry>
+          <entry name="VPN-Remote-SSL">
+            <split-tunneling>
+              <include-domains>
+                <list/>
+              </include-domains>
+              <exclude-domains>
+                <list/>
+              </exclude-domains>
+              <access-route>
+                <member>0.0.0.0/0</member>
+              </access-route>
+              <exclude-access-route>
+              {% for route in teams_routes %}
+                <member>{{ route }}</member>
+              {% endfor %}
+              </exclude-access-route>
+              <include-applications/>
+              <exclude-applications/>
+            </split-tunneling>
+            <authentication-override>
+              <generate-cookie>no</generate-cookie>
+            </authentication-override>
+            <source-address>
+              <ip-address/>
+              <region/>
+            </source-address>
+            <source-user>
+              <member>cn=gg_sec_ms_vpn-remote_ssl,ou=groups,ou=ms,ou=acwl,ou=organisationen,dc=edvms,dc=local</member>
+            </source-user>
+            <authentication-server-ip-pool/>
+            <ip-pool>
+              <member>172.24.4.2-172.24.4.254</member>
+            </ip-pool>
+            <os>
+              <member>any</member>
+            </os>
+            <retrieve-framed-ip-address>no</retrieve-framed-ip-address>
+            <no-direct-access-to-local-network>no</no-direct-access-to-local-network>
+          </entry>
 
     # cisco-user-gw - VPN-Remote
 
@@ -100,29 +100,29 @@
           /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']
           /global-protect/global-protect-gateway/entry[@name='cisco-user-gw']/remote-user-tunnel-configs
         element: |
-        <entry name="VPN Remote">
-          <split-tunneling>
-            <access-route>
-              <member>0.0.0.0/0</member>
-            </access-route>
-            <exclude-access-route>
-            {% for route in teams_routes %}
-              <member>{{ route }}</member>
-            {% endfor %}
-            </exclude-access-route>
-          </split-tunneling>
-          <source-user>
-            <member>cn=gg_sec_ms_vpn-remote,ou=groups,ou=ms,ou=acwl,ou=organisationen,dc=edvms,dc=local</member>
-          </source-user>
-          <ip-pool>
-            <member>172.24.2.2-172.24.3.254</member>
-          </ip-pool>
-          <os>
-            <member>any</member>
-          </os>
-          <retrieve-framed-ip-address>no</retrieve-framed-ip-address>
-          <no-direct-access-to-local-network>no</no-direct-access-to-local-network>
-        </entry>
+          <entry name="VPN Remote">
+            <split-tunneling>
+              <access-route>
+                <member>0.0.0.0/0</member>
+              </access-route>
+              <exclude-access-route>
+              {% for route in teams_routes %}
+                <member>{{ route }}</member>
+              {% endfor %}
+              </exclude-access-route>
+            </split-tunneling>
+            <source-user>
+              <member>cn=gg_sec_ms_vpn-remote,ou=groups,ou=ms,ou=acwl,ou=organisationen,dc=edvms,dc=local</member>
+            </source-user>
+            <ip-pool>
+              <member>172.24.2.2-172.24.3.254</member>
+            </ip-pool>
+            <os>
+              <member>any</member>
+            </os>
+            <retrieve-framed-ip-address>no</retrieve-framed-ip-address>
+            <no-direct-access-to-local-network>no</no-direct-access-to-local-network>
+          </entry>
 
     # cisco-user-gw - VPN Remoteadmin
 
@@ -142,29 +142,29 @@
           /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']
           /global-protect/global-protect-gateway/entry[@name='cisco-user-gw']/remote-user-tunnel-configs
         element: |
-        <entry name="VPN Remoteadmin">
-          <split-tunneling>
-            <access-route>
-              <member>0.0.0.0/0</member>
-            </access-route>
-            <exclude-access-route>
-            {% for route in teams_routes %}
-              <member>{{ route }}</member>
-            {% endfor %}
-            </exclude-access-route>
-          </split-tunneling>
-          <source-user>
-            <member>cn=gg_sec_ms_vpn-remoteadmin,ou=groups,ou=ms,ou=acwl,ou=organisationen,dc=edvms,dc=local</member>
-          </source-user>
-          <ip-pool>
-            <member>172.26.2.2-172.26.2.254</member>
-          </ip-pool>
-          <os>
-            <member>any</member>
-          </os>
-          <retrieve-framed-ip-address>no</retrieve-framed-ip-address>
-          <no-direct-access-to-local-network>no</no-direct-access-to-local-network>
-        </entry>
+          <entry name="VPN Remoteadmin">
+            <split-tunneling>
+              <access-route>
+                <member>0.0.0.0/0</member>
+              </access-route>
+              <exclude-access-route>
+              {% for route in teams_routes %}
+                <member>{{ route }}</member>
+              {% endfor %}
+              </exclude-access-route>
+            </split-tunneling>
+            <source-user>
+              <member>cn=gg_sec_ms_vpn-remoteadmin,ou=groups,ou=ms,ou=acwl,ou=organisationen,dc=edvms,dc=local</member>
+            </source-user>
+            <ip-pool>
+              <member>172.26.2.2-172.26.2.254</member>
+            </ip-pool>
+            <os>
+              <member>any</member>
+            </os>
+            <retrieve-framed-ip-address>no</retrieve-framed-ip-address>
+            <no-direct-access-to-local-network>no</no-direct-access-to-local-network>
+          </entry>
 
     # cisco-user-gw - VPN kzvdev
 
@@ -184,26 +184,26 @@
           /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']
           /global-protect/global-protect-gateway/entry[@name='cisco-user-gw']/remote-user-tunnel-configs
         element: |
-        <entry name="VPN kzvdev">
-          <split-tunneling>
-            <access-route>
-              <member>0.0.0.0/0</member>
-            </access-route>
-            <exclude-access-route>
-            {% for route in teams_routes %}
-              <member>{{ route }}</member>
-            {% endfor %}
-            </exclude-access-route>
-          </split-tunneling>
-          <source-user>
-            <member>cn=gg_sec_ms_vpn-kzvdev,ou=groups,ou=ms,ou=acwl,ou=organisationen,dc=edvms,dc=local</member>
-          </source-user>
-          <ip-pool>
-            <member>172.25.2.2-172.25.2.254</member>
-          </ip-pool>
-          <os>
-            <member>any</member>
-          </os>
-          <retrieve-framed-ip-address>no</retrieve-framed-ip-address>
-          <no-direct-access-to-local-network>no</no-direct-access-to-local-network>
-        </entry>
+          <entry name="VPN kzvdev">
+            <split-tunneling>
+              <access-route>
+                <member>0.0.0.0/0</member>
+              </access-route>
+              <exclude-access-route>
+              {% for route in teams_routes %}
+                <member>{{ route }}</member>
+              {% endfor %}
+              </exclude-access-route>
+            </split-tunneling>
+            <source-user>
+              <member>cn=gg_sec_ms_vpn-kzvdev,ou=groups,ou=ms,ou=acwl,ou=organisationen,dc=edvms,dc=local</member>
+            </source-user>
+            <ip-pool>
+              <member>172.25.2.2-172.25.2.254</member>
+            </ip-pool>
+            <os>
+              <member>any</member>
+            </os>
+            <retrieve-framed-ip-address>no</retrieve-framed-ip-address>
+            <no-direct-access-to-local-network>no</no-direct-access-to-local-network>
+          </entry>
