@@ -26,7 +26,7 @@
 
     - name: Delete GlobalProtect Gateway Config
       paloaltonetworks.panos.panos_type_cmd:
-        provider: '{{ external_firewall }}'
+        provider: '{{ device }}'
         cmd: delete
         xpath: |
           /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']
@@ -35,7 +35,7 @@
 
     - name: Set GlobalProtect Gateway Config
       paloaltonetworks.panos.panos_type_cmd:
-        provider: '{{ external_firewall }}'
+        provider: '{{ device }}'
         xpath: |
           /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']
           /global-protect/global-protect-gateway/entry[@name='ansible-test-gw']/remote-user-tunnel-configs
