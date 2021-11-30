@@ -1,0 +1,68 @@
+---
+# First:  Shutdown and Power-off VM
+# Second: Create VMware-Snapshot
+# Third:  Boot VM
+
+- name: Snapshot and Reboot
+  hosts:
+    - BSBDTV001T
+    - BSBDTV002T
+    - BSBDTV003T
+  serial:
+    - 1
+  #  strategy: free
+  
+  tasks:
+    - name: Wait for the virtual machine to shutdown
+      community.vmware.vmware_guest_powerstate:
+        hostname: '{{ lookup("env", "VMWARE_HOST") }}'
+        username: '{{ lookup("env", "VMWARE_USER") }}'
+        password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
+        validate_certs: false
+        datacenter: "{{ datacenter_name }}"
+        folder: /
+        name: "{{ inventory_hostname_short }}"
+        state: shutdown-guest
+        state_change_timeout: 200
+      delegate_to: localhost
+      register: deploy
+    
+    - name: Set the state of a virtual machine to poweroff
+      community.vmware.vmware_guest_powerstate:
+        hostname: '{{ lookup("env", "VMWARE_HOST") }}'
+        username: '{{ lookup("env", "VMWARE_USER") }}'
+        password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
+        validate_certs: false
+        datacenter: "{{ datacenter_name }}"
+        folder: /
+        name: "{{ inventory_hostname_short }}"
+        state: powered-off
+      delegate_to: localhost
+      register: deploy
+
+    - name: Create a snapshot, auf Gross/Kleinschreibung des Hostnamen achten
+      community.vmware.vmware_guest_snapshot:
+        hostname: '{{ lookup("env", "VMWARE_HOST") }}'
+        username: '{{ lookup("env", "VMWARE_USER") }}'
+        password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
+        validate_certs: false
+        datacenter: "{{ datacenter_name }}"
+        folder: /
+        name: "{{ inventory_hostname_short }}"
+        state: present
+        snapshot_name: snap_ansible
+        description: Snapshot_von_Ansible
+      delegate_to: localhost
+
+    - name: Wait for the virtual machine to shutdown
+      community.vmware.vmware_guest_powerstate:
+        hostname: '{{ lookup("env", "VMWARE_HOST") }}'
+        username: '{{ lookup("env", "VMWARE_USER") }}'
+        password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
+        validate_certs: false
+        datacenter: "{{ datacenter_name }}"
+        folder: /
+        name: "{{ inventory_hostname_short }}"
+        state: powered-on
+      delegate_to: localhost
+      register: deploy
