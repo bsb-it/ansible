@@ -15,6 +15,15 @@
       api_key: '{{ api_key | default(omit) }}'
 
   tasks:
+    - name: Download EDL for MS365 - Any
+      get_url:
+        url: https://saasedl.paloaltonetworks.com/feeds/m365/worldwide/any/all/ipv4
+        dest: /var/tmp/ms365_list.txt
+
+    - name: Read O365 IP list into fact
+      set_fact:
+        teams_routes: '{{ lookup("file", "/var/tmp/ms365_list.txt").splitlines() }}'
+        
     - name: Set GlobalProtect Gateway Config
       paloaltonetworks.panos.panos_type_cmd:
         provider: '{{ device }}'
