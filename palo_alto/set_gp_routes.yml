@@ -24,18 +24,59 @@
       set_fact:
         teams_routes: '{{ lookup("file", "/var/tmp/ms365_list.txt").splitlines() }}'
         
+    - name: Delete GlobalProtect Gateway Config
+	  paloaltonetworks.panos.panos_type_cmd:
+		provider: '{{ device }}'
+		cmd: delete
+		xpath: |
+		  /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']
+		  /global-protect/global-protect-gateway/entry[@name='ansible-test-gw']/remote-user-tunnel-configs/entry[@name='test-client']
+		  
+		  
+	# notify: Commit external firewall    
+        
     - name: Set GlobalProtect Gateway Config
       paloaltonetworks.panos.panos_type_cmd:
         provider: '{{ device }}'
         xpath: |
-          /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']
-          /global-protect/global-protect-gateway/entry[@name='ansible-test-gw']/remote-user-tunnel-configs/entry[@name='test-client']/split-tunneling/access-route
+		  /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']
+		  /global-protect/global-protect-gateway/entry[@name='ansible-test-gw']/remote-user-tunnel-configs/entry[@name='test-client']
         element: |
-            <access-route>
-            {% for route in teams_routes %}
-                 <member>{{ route }}</member>
-            {% endfor %}
-            </access-route>
+		  <entry name="test-client">
+			<split-tunneling>
+			  <include-domains>
+				<list/>
+			  </include-domains>
+			  <exclude-domains>
+				<list/>
+			  </exclude-domains>
+			  <access-route>
+			  {% for route in teams_routes %}
+				<member>{{ route }}</member>
+			  {% endfor %}
+			  </access-route>
+			  <exclude-access-route/>
+			  <include-applications/>
+			  <exclude-applications/>
+			</split-tunneling>
+			<authentication-override>
+			  <generate-cookie>no</generate-cookie>
+			</authentication-override>
+			<source-address>
+			  <ip-address/>
+			  <region/>
+			</source-address>
+			<source-user>
+			  <member>dtstest</member>
+			</source-user>
+			<authentication-server-ip-pool/>
+			<ip-pool/>
+			<os>
+			  <member>any</member>
+			</os>
+			<retrieve-framed-ip-address>no</retrieve-framed-ip-address>
+			<no-direct-access-to-local-network>no</no-direct-access-to-local-network>
+		  </entry>
 
     # notify: Commit external firewall
 
