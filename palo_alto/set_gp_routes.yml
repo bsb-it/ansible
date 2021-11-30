@@ -1,24 +1,41 @@
 ---
-- name: Delete GlobalProtect Gateway Config
-  paloaltonetworks.panos.panos_type_cmd:
-    provider: '{{ external_firewall }}'
-    cmd: delete
-    xpath: |
-      /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']
-      /global-protect/global-protect-gateway/entry[@name='GlobalProtect Gateway']/remote-user-tunnel-configs/entry[@name='Ansible-Test']
-# notify: Commit external firewall
+- name: Demonstrate how to use OP module to execute various op commands on PANW device
+  hosts: all
+  connection: local
+  # gather_facts: no
 
-- name: Set GlobalProtect Gateway Config
-  paloaltonetworks.panos.panos_type_cmd:
-    provider: '{{ device }}'
-    xpath: |
-      /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']
-      /global-protect/global-protect-gateway/entry[@name='ansible-test-gw']/remote-user-tunnel-configs/entry[@name='test-client']/split-tunneling/access-route
-    element: |
-        <access-route>
-        {% for route in teams_routes %}
-             <member>{{ route }}</member>
-        {% endfor %}
-        </access-route>
+  collections:
+    - paloaltonetworks.panos
+    
+  vars:
+    device:
+      ip_address: '{{ ip_address }}'
+      username: '{{ lookup("env", "ANSIBLE_NET_USERNAME") | default(omit) }}'
+      password: '{{ lookup("env", "ANSIBLE_NET_PASSWORD") | default(omit) }}'
+      api_key: '{{ api_key | default(omit) }}'
 
-# notify: Commit external firewall
+  tasks:
+    - name: Delete GlobalProtect Gateway Config
+      paloaltonetworks.panos.panos_type_cmd:
+        provider: '{{ device }}'
+        cmd: delete
+        xpath: |
+          /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']
+          /global-protect/global-protect-gateway/entry[@name='GlobalProtect Gateway']/remote-user-tunnel-configs/entry[@name='Ansible-Test']
+    # notify: Commit external firewall
+
+    - name: Set GlobalProtect Gateway Config
+      paloaltonetworks.panos.panos_type_cmd:
+        provider: '{{ device }}'
+        xpath: |
+          /config/devices/entry[@name='localhost.localdomain']/vsys/entry[@name='vsys1']
+          /global-protect/global-protect-gateway/entry[@name='ansible-test-gw']/remote-user-tunnel-configs/entry[@name='test-client']/split-tunneling/access-route
+        element: |
+            <access-route>
+            {% for route in teams_routes %}
+                 <member>{{ route }}</member>
+            {% endfor %}
+            </access-route>
+
+    # notify: Commit external firewall
+
