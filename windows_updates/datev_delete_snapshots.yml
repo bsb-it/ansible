@@ -1,0 +1,25 @@
+---
+# Delete VMware-Snapthots of DATEV
+
+- name: Snapshot and Reboot
+  hosts:
+    - BSBDTV001T
+    - BSBDTV002T
+    - BSBDTV003T
+  serial:
+    - 1
+  #  strategy: free
+  
+  tasks:
+    - name: Delete Snapshot "snap_ansible_datev"
+      community.vmware.vmware_guest_snapshot:
+        hostname: '{{ lookup("env", "VMWARE_HOST") }}'
+        username: '{{ lookup("env", "VMWARE_USER") }}'
+        password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
+        validate_certs: false
+        datacenter: "{{ datacenter_name }}"
+        folder: /
+        name: "{{ inventory_hostname_short }}"
+        state: absent
+        snapshot_name: snap_ansible_datev
+      delegate_to: localhost
