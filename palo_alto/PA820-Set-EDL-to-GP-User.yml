@@ -17,7 +17,7 @@
   tasks:
     - name: Download EDL for MS365 - Any
       get_url:
-        url: https://saasedl.paloaltonetworks.com/feeds/m365/worldwide/any/all/ipv4
+        url: http://edl.bsb-buchstelle.de/ipv4_list.txt
         dest: /var/tmp/ms365_list.txt
 
     - name: Read O365 IP list into fact
