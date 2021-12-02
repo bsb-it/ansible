@@ -13,6 +13,6 @@
       ansible.windows.win_dns_client:
         adapter_names: 'Ethernet*'
         dns_servers:
-          - 192.168.56.132
-          - 192.168.34.136
+          - "{{ dnsserver_1 }}"
+          - "{{ dnsserver_2 }}"
  
