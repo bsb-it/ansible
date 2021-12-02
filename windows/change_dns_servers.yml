@@ -9,7 +9,7 @@
   #  strategy: free
   
   tasks:
-    - name: Set DNS-Servers for all Ethernet-Adapters
+    - name: Set DNS-Servers for all adapters which name begins with "Ethernet"
       ansible.windows.win_dns_client:
         adapter_names: 'Ethernet*'
         dns_servers:
