@@ -11,8 +11,8 @@
   tasks:
     - name: Set DNS-Servers for all Ethernet-Adapters
       ansible.windows.win_dns_client:
-      adapter_names: 'Ethernet*'
-      dns_servers:
-        - 192.168.56.132
-        - 192.168.34.136
+        adapter_names: 'Ethernet*'
+        dns_servers:
+          - 192.168.56.132
+          - 192.168.34.136
  
