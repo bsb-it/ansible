@@ -1,0 +1,26 @@
+---
+# Reboot Windows-Server
+
+- name: Windows-Reboot ohne VMware-Snapshot
+  hosts:
+    - all
+  serial:
+    - 1
+  #  strategy: free
+  
+  tasks:
+    - name: Suche offene Dateien in Dateifreigaben
+      ansible.windows.win_powershell:
+        script: |
+          Get-SmbOpenfile
+      register: openfiles
+
+    - name: Reboot Server
+      ansible.windows.win_reboot:
+      when:
+        - openfiles.output != "[]"
+      register: update_result
+
+    - name: print variable
+      debug:
+        msg: '{{ update_result }}'
