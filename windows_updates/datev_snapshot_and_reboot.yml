@@ -54,7 +54,7 @@
         description: Snapshot_von_Ansible
       delegate_to: localhost
 
-    - name: Wait for the virtual machine to shutdown
+    - name: Wait for the virtual machine to power up
       community.vmware.vmware_guest_powerstate:
         hostname: '{{ lookup("env", "VMWARE_HOST") }}'
         username: '{{ lookup("env", "VMWARE_USER") }}'
