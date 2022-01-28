@@ -89,7 +89,7 @@
 	      Write-Host "Server $env:ComputerName befindet sich NICHT im WARTUNGSMODUS" -ForegroundColor Red
 	      Write-Host "Bitte prüfen Sie die Dienste und Befehle auf Meldungen" -ForegroundColor Red
 	  }
-      register: exchange
+      register: exchange_result
 
 
     - name: search and install updates und Logfile schreiben
@@ -163,10 +163,11 @@
           Write-host "`n"
           Get-MailboxDatabaseCopyStatus -Server $env:ComputerName | ft
           Write-Host "Fertig!" -ForegroundColor Green
-      register: exchange
+      register: exchange_result
 
 
 
     - name: print variable
       debug:
         msg: '{{ update_result }}'
+	msg: '{{ exchange_result }}'
