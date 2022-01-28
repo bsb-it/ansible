@@ -1,5 +1,5 @@
 ---
-# Start Adnova
+# Playbook for Exchange Server Update
 
 - name: Windows Updates Exchange Server
   hosts:
@@ -8,6 +8,9 @@
     - 1
   # strategy: free
   gather_facts: yes
+  
+  vars:
+    targetname: '{{ lookup("env", "EXCHANGE_TARGET") }}'
 
   tasks:
     - name: Create a snapshot, auf Gross/Kleinschreibung des Hostnamen achten
@@ -53,7 +56,7 @@
           Sleep -Seconds 5
 
           # Bestehende Mails werden aus der Queue auf einen anderen Server verschoben
-          Redirect-Message -Server $env:ComputerName -Target  -Confirm:$false
+          Redirect-Message -Server $env:ComputerName -Target '{{ targetname }}' -Confirm:$false
           Write-Host "Hub-Transport deaktiviert"
 
           # ClusterNode in Suspend-Mode
@@ -105,25 +108,60 @@
     - name: PowerShell script Pre-Installation Exchange
       ansible.windows.win_powershell:
         script: |
-          # Defender wieder aktiveren
+          Write-Host "Server-Komponeten werden aktiv gesetzt"
+          Set-ServerComponentState $env:ComputerName –Component ServerWideOffline –State Active –Requester Maintenance
+ 
+          # ClusterNode wieder UP setzen
+          Write-Host "ClusterNode wird online genommen"
+          Resume-ClusterNode –Name $env:ComputerName
+ 
+          # Mailbox-Datenbank wieder online setzen und für Rückschwenk aktivieren
+          # KEIN aktives zurückschwenken
+          Write-Host "Mailboxdatenbanken werden wieder aktiv genommen"
+          Write-Host "Es wird keine Datenbank aktiv zurückgenommen"
+          Set-MailboxServer $env:ComputerName –DatabaseCopyAutoActivationPolicy Unrestricted
+          Set-MailboxServer $env:ComputerName –DatabaseCopyActivationDisabledAndMoveNow $false
+ 
+          # Hub-Transport wieder ACTIVE setzen - Mails werden wieder angenommen
+          Write-Host "Hub-Transport wird online genommen - Mails werden wieder angenommen"
+          Set-ServerComponentState $env:ComputerName –Component HubTransport –State Active –Requester Maintenance
+ 
+          # Aktivierung Defender und PS-Restriction-Policy
+          Write-Host "Defender und PS-Policy werden wieder aktiviert"
           Set-MpPreference -DisableRealtimeMonitoring $false
-
-          # Wartungsmodus aufheben
-          Set-ServerComponentState Exchange01 –Component ServerWideOffline –State Active –Requester Maintenance
-          Resume-ClusterNode –Name Exchange01
-          Set-MailboxServer Exchange01 –DatabaseCopyAutoActivationPolicy Unrestricted
-          Set-MailboxServer Exchange01 –DatabaseCopyActivationDisabledAndMoveNow $false
-          Set-ServerComponentState Exchange01 –Component HubTransport –State Active –Requester Maintenance
-
-          # Händische Anpassungen im ISS usw. kontrollieren
-          # Spezielle Einstellungen wie Registry Werte, web.config oder Anpassungen am OWA Login Template müssen nach der Installation kontrolliert werden. 
-
-          # Überprüfungen
-          # Status der DAG prüfen
-          # Mailbox Datenbanken entsprechend der Aktivierungspräferenz verteilen (geschieht bei Exchange 2016 ab CU2 automatisch)
-
-          # Hub Transport neustarten
-          Restart-Service MSExchangeTransport
+          Set-ExecutionPolicy RemoteSigned -force
+ 
+          # Prüfen ob immer noch imWartungsmodus
+          if ((Get-ClusterNode -Name $env:Computername).state -eq "Up") {
+              Write-Host "Server $env:ComputerName befindet sich im NORMALMODUS" -ForegroundColor Green
+          }
+          else {
+              Write-Host "Server $env:ComputerName befindet sich immer noch im WARTUNGSMODUS" -ForegroundColor Red
+              Write-Host "Bitte prüfen Sie die Dienste und Eventlogs auf Fehler" -ForegroundColor Red
+          }
+ 
+          # Prüfroutinen für Dienste und Komponenten - jeweils mit Pause für Prüfung
+          Write-Host "###########################################################" -ForegroundColor Yellow
+          Write-Host "####### Ausgabe aller wichtigen Dienste zur Prüfung #######" -ForegroundColor Yellow
+          Write-Host "###########################################################" -ForegroundColor Yellow
+          write-host "`n"
+          Write-Host "--- ClusterNode muss UP sein ---" -ForegroundColor Yellow
+          Get-ClusterNode –Name $env:ComputerName
+         
+          Write-Host "--- Test-ServiceHealth ---" -ForegroundColor Yellow
+          Write-Host "Alle Rollen müssen RequiredServicesRunning auf TRUE stehen" -ForegroundColor Yellow
+          Write-host "`n"
+          Test-ServiceHealth | ft -AutoSize
+          
+          Write-Host "--- Überprüfen aller Server-Komponenten ---" -ForegroundColor Yellow
+          Write-Host "Alle Komponenten ACTIVE bis auf ForwardSyncDaemon und ProvisioningRps" -ForegroundColor Yellow
+          Write-host "`n"
+          Get-ServerComponentState $env:ComputerName | where {$_.State -ne "Active"} | ft
+          
+          Write-Host "Anzeigen aller Datenbanken" -ForegroundColor Yellow
+          Write-host "`n"
+          Get-MailboxDatabaseCopyStatus -Server $env:ComputerName | ft
+          Write-Host "Fertig!" -ForegroundColor Green
       register: exchange
 
 
