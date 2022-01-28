@@ -1,5 +1,6 @@
 ---
 # Playbook for Exchange Server Update
+# WICHTIG: EXCHANGE_TARGET (also anderer DAG-Node) muss definiert sein
 
 - name: Windows Updates Exchange Server
   hosts:
