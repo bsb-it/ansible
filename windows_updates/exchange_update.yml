@@ -106,7 +106,7 @@
       register: update_result
 
 
-    - name: PowerShell script Pre-Installation Exchange
+    - name: PowerShell script Post-Installation Exchange
       ansible.windows.win_powershell:
         script: |
           Write-Host "Server-Komponeten werden aktiv gesetzt"
