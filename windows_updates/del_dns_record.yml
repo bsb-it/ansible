@@ -1,0 +1,17 @@
+---
+# Delete DNS-Record
+
+- name: Delete one DNS-Record
+  hosts:
+    - all
+  serial:
+    - 1
+  # strategy: free
+  gather_facts: no
+  
+  tasks:
+    - name: PowerShell script
+      ansible.windows.win_powershell:
+        script: |
+          Remove-DnsServerResourceRecord -ZoneName "{{ DNS_RECORD_ZONE }}" -RRType "A" -Name "{{ DNS_RECORD_SHORTNAME }}" -RecordData "{{ DNS_RECORD_IP }}"
+      register: dns_change
