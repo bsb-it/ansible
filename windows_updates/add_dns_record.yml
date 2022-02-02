@@ -24,4 +24,4 @@
     - name: print variable
       debug:
         msg:
-	  - '{{ dns_change }}'
+          - '{{ dns_change }}'
