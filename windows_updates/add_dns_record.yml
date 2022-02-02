@@ -17,6 +17,6 @@
       #register: dns_change
       debug:
         msg: "{{ item[0] }} and {{ item[1] }}"
-      with_items:
+      with_nested:
         - "{{ DNS_RECORD_ZONE }}"
         - "{{ DNS_RECORD_SHORTNAME }}"
