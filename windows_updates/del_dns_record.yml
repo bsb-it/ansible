@@ -14,7 +14,7 @@
       ansible.windows.win_powershell:
         script: |
           Remove-DnsServerResourceRecord -ZoneName "{{ item.0 }}" -RRType "A" -Name "{{ item.1 }}" -RecordData "{{ DNS_RECORD_IP }}" -Force
-      register: dns_change
-      with_items:
+      with_nested:
         - "{{ DNS_RECORD_ZONE }}"
         - "{{ DNS_RECORD_SHORTNAME }}"
+        
