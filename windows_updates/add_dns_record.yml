@@ -1,0 +1,27 @@
+---
+# Add DNS-Record
+
+- name: Add one DNS-Record
+  hosts:
+    - all
+  serial:
+    - 1
+  # strategy: free
+  gather_facts: no
+  
+  vars:
+    dns_record_shortname: '{{ lookup("env", "DNS_RECORD_SHORTNAME") }}'
+    dns_record_zone: '{{ lookup("env", "DNS_RECORD_ZONE") }}'
+    dns_record_ip: '{{ lookup("env", "DNS_RECORD_IP") }}'
+
+  tasks:
+    - name: PowerShell script
+      ansible.windows.win_powershell:
+        script: |
+          Add-DnsServerResourceRecordA -Name "{{ dns_record_shortname }}" -ZoneName "{{ dns_record_zone }}" -AllowUpdateAny -IPv4Address "{{ dns_record_ip }}" -TimeToLive 01:00:00
+      register: dns_change
+      
+    - name: print variable
+      debug:
+        msg:
+	        - '{{ dns_change }}'
