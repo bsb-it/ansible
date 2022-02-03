@@ -17,6 +17,7 @@
           - SecurityUpdates
           - UpdateRollups
           - Updates
+          - ServicePacks
         state: searched
         reboot: no
       register: win_updates
