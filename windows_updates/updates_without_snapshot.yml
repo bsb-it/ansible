@@ -19,6 +19,7 @@
           - SecurityUpdates
           - UpdateRollups
           - Updates
+          - ServicePacks
             #state: searched
         reboot: yes
         reboot_timeout: 1200
