@@ -30,7 +30,7 @@
         reboot_timeout: 1200
         log_path: c:\ansible_{{ inventory_hostname }}.txt
       when:
-        - openfiles.output is undefined
+        - openfiles.output != "[]"
         - ansible_date_time.hour | int < 5
       register: update_result
 
