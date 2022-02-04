@@ -31,7 +31,7 @@
         log_path: c:\ansible_{{ inventory_hostname }}.txt
       when:
         - openfiles.output != "[]"
-        - ansible_date_time.hour | int < 5
+        # - ansible_date_time.hour | int < 5
       register: update_result
 
     - name: print variable
