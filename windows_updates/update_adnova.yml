@@ -34,9 +34,10 @@
           - SecurityUpdates
           - UpdateRollups
           - Updates
+          - ServicePacks
             #state: searched
         reboot: yes
-        reboot_timeout: 1200
+        reboot_timeout: 2100
         log_path: c:\ansible_{{ inventory_hostname }}.txt
       register: update_result
       
