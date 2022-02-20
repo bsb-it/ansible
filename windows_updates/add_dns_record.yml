@@ -13,7 +13,7 @@
     - name: PowerShell script
       ansible.windows.win_powershell:
         script: |
-          Add-DnsServerResourceRecordA -Name "{{ item.0 }}" -ZoneName "{{ item.1 }}" -AllowUpdateAny -IPv4Address "{{ DNS_RECORD_IP }}" -TimeToLive 00:15:00
+          Add-DnsServerResourceRecordA -Name "{{ item.0 }}" -ZoneName "{{ item.1 }}" -AllowUpdateAny -IPv4Address "{{ DNS_RECORD_IP }}" -TimeToLive 00:05:00
       with_nested:
         - "{{ DNS_RECORD_SHORTNAME }}"
         - "{{ DNS_RECORD_ZONE }}"
