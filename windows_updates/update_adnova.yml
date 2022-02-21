@@ -4,9 +4,7 @@
 
 - name: Windows-Updates mit VMware-Snapshot
   hosts:
-    - BSBADF000
-    - BSBADF001
-    - BSBADF002
+    - all
   serial:
     - 1
   #  strategy: free
