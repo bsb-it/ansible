@@ -44,8 +44,8 @@
         password: "{{ passwort }}"
         logon_count: 1
     
-    - name: Reboot the machine with all defaults
-      reboot:
+    #- name: Reboot the machine with all defaults
+    #  reboot:
     
     #- name: print variable
     #  debug:
