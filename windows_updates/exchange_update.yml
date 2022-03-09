@@ -14,21 +14,6 @@
     targetname: '{{ lookup("env", "EXCHANGE_TARGET") }}'
 
   tasks:
-    - name: Create a snapshot, auf Gross/Kleinschreibung des Hostnamen achten
-      community.vmware.vmware_guest_snapshot:
-        hostname: '{{ lookup("env", "VMWARE_HOST") }}'
-        username: '{{ lookup("env", "VMWARE_USER") }}'
-        password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
-        validate_certs: false
-        datacenter: "{{ datacenter_name }}"
-        folder: /
-        name: "{{ inventory_hostname_short }}"
-        state: present
-        snapshot_name: snap_ansible
-        description: Snapshot_von_Ansible
-      delegate_to: localhost  
-  
-  
     - name: PowerShell script Pre-Installation Exchange
       ansible.windows.win_powershell:
         script: |
@@ -91,6 +76,21 @@
           }
       register: exchange_result
 
+
+    - name: Create a snapshot, auf Gross/Kleinschreibung des Hostnamen achten
+      community.vmware.vmware_guest_snapshot:
+        hostname: '{{ lookup("env", "VMWARE_HOST") }}'
+        username: '{{ lookup("env", "VMWARE_USER") }}'
+        password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
+        validate_certs: false
+        datacenter: "{{ datacenter_name }}"
+        folder: /
+        name: "{{ inventory_hostname_short }}"
+        state: present
+        snapshot_name: snap_ansible
+        description: Snapshot_von_Ansible
+      delegate_to: localhost  
+  
 
     - name: search and install updates und Logfile schreiben
       win_updates:
