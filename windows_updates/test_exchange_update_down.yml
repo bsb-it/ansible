@@ -21,11 +21,11 @@
           Add-PSSnapin Microsoft.Exchange.Management.PowerShell.SnapIn
           
           # Prüfen ob bereits im Wartungsmodus (ClusterNode not UP und keine Datenbank aktiv gemountet)
-          # if ((Get-ClusterNode -Name $env:Computername).state -ne "Up" -and (Get-MailboxDatabaseCopyStatus -Server $env:ComputerName | Where {$_.Status -eq "Mounted"}).Count -eq 0) {
-          #     Write-Host "Server $env:ComputerName befindet sich bereits im WARTUNGSMODUS" -ForegroundColor Green
-          #     Write-Host "Keine Änderung vorgenommen..." -ForegroundColor Green
-          #     Exit
-          # }
+          if ((Get-ClusterNode -Name $env:Computername).state -ne "Up" -and (Get-MailboxDatabaseCopyStatus -Server $env:ComputerName | Where {$_.Status -eq "Mounted"}).Count -eq 0) {
+              Write-Host "Server $env:ComputerName befindet sich bereits im WARTUNGSMODUS" -ForegroundColor Green
+              Write-Host "Keine Änderung vorgenommen..." -ForegroundColor Green
+              Exit
+          }
           
           # Sicherheitsfunktionen abschalten (PS-Execution-Policy und Defender)
           # Write-Host "Server $env:ComputerName wir in den Wartungsmodus versetzt..."
