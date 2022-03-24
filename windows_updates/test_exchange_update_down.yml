@@ -82,4 +82,4 @@
     - name: print variable
       debug:
         msg:
-        - '{{ exchange_result }}'
+        - '{{ exchange_result.stdout }}'
