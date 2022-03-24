@@ -24,7 +24,7 @@
           if ((Get-ClusterNode -Name $env:Computername).state -ne "Up" -and (Get-MailboxDatabaseCopyStatus -Server $env:ComputerName | Where {$_.Status -eq "Mounted"}).Count -eq 0) {
               echo "Server $env:ComputerName befindet sich bereits im WARTUNGSMODUS" -ForegroundColor Green
               echo "Keine Änderung vorgenommen..." -ForegroundColor Green
-              Exit
+              # Exit
           }
           
           # Sicherheitsfunktionen abschalten (PS-Execution-Policy und Defender)
