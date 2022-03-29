@@ -9,9 +9,6 @@
     - 1
   # strategy: free
   gather_facts: yes
-  
-  # vars:
-  #   targetname: '{{ lookup("env", "EXCHANGE_TARGET") }}'
 
   tasks:
     - name: PowerShell script Pre-Installation Exchange
@@ -26,54 +23,6 @@
               echo "Keine Änderung vorgenommen..." -ForegroundColor Green
               # Exit
           }
-          
-          # Sicherheitsfunktionen abschalten (PS-Execution-Policy und Defender)
-          # Write-Host "Server $env:ComputerName wir in den Wartungsmodus versetzt..."
-          # Write-Host "PS-Policy und Defender werden deaktiviert"
-          # Set-ExecutionPolicy Unrestricted -force
-          # Set-MpPreference -DisableRealtimeMonitoring $true
-          # Sleep -Seconds 3
-          # Write-Host "PS-Policy unrestriced und Defender deaktiviert"
-          
-          # Hub-Transport abschalten
-          # Es werden keine Mails mehr angenommen
-          # Write-Host "Hub-Transport wird deaktiviert und Mail-Queues verschoben..."
-          # Set-ServerComponentState $env:ComputerName –Component HubTransport –State Draining –Requester Maintenance
-          # Sleep -Seconds 5
-          
-          # Bestehende Mails werden aus der Queue auf einen anderen Server verschoben
-          # Redirect-Message -Server $env:ComputerName -Target '{{ targetname }}' -Confirm:$false
-          # Write-Host "Hub-Transport deaktiviert"
-          
-          # ClusterNode in Suspend-Mode
-          # Write-Host "ClusterNode $env:ComputerName wird angehalten"
-          # Suspend-ClusterNode –Name $env:ComputerName
-          # Sleep -Seconds 3
-          # Write-Host "ClusterNode $env:ComputerName angehalten"
-          
-          # Mailbox-Datenbanken verschieben und 
-          # Write-Host "Aktive Mailboxdatenbanken werden evakuiert"
-          # Set-MailboxServer $env:ComputerName –DatabaseCopyActivationDisabledAndMoveNow $true
-          # Set-MailboxServer $env:ComputerName –DatabaseCopyAutoActivationPolicy Blocked
-          # Write-Host "Skript wartet, bis Datenbanken evakuiert wurden - Prüfintervall: 30 Sekunden"
-          # While ((Get-MailboxDatabaseCopyStatus -Server $env:ComputerName | Where {$_.Status -eq "Mounted"}).Count -ne 0) 
-          # {
-          #   Sleep -Seconds 30
-          # }
-          # Write-Host "Datenbanken wurden alle evakuiert - keine aktive Datenbankkopie mehr auf $env:ComputerName aktiv"
-          
-          # Server-Komponenten deaktivieren
-          # Set-ServerComponentState $env:ComputerName –Component ServerWideOffline –State InActive –Requester Maintenance
-          # Write-Host "Alle Server-Komponenten deaktiviert"
-          
-          # Prüfen ob im Wartungsmodus (keine aktiven Datenbanken und ClusterNode not UP)
-          # if ((Get-ClusterNode -Name $env:Computername).state -ne "Up" -and (Get-MailboxDatabaseCopyStatus -Server $env:ComputerName | Where {$_.Status -eq "Mounted"}).Count -eq 0) {
-          #     Write-Host "Server $env:ComputerName befindet sich im WARTUNGSMODUS" -ForegroundColor Green
-          # }
-          # else {
-          #     Write-Host "Server $env:ComputerName befindet sich NICHT im WARTUNGSMODUS" -ForegroundColor Red
-          #     Write-Host "Bitte prüfen Sie die Dienste und Befehle auf Meldungen" -ForegroundColor Red
-          # }
           
       register: exchange_result
 
