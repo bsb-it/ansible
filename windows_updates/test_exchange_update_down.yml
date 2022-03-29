@@ -10,8 +10,8 @@
   # strategy: free
   gather_facts: yes
   
-  vars:
-    targetname: '{{ lookup("env", "EXCHANGE_TARGET") }}'
+  # vars:
+  #   targetname: '{{ lookup("env", "EXCHANGE_TARGET") }}'
 
   tasks:
     - name: PowerShell script Pre-Installation Exchange
