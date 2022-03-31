@@ -38,7 +38,7 @@
           # Hub-Transport abschalten
           # Es werden keine Mails mehr angenommen
           Write-Host "Hub-Transport wird deaktiviert und Mail-Queues verschoben..."
-          Set-ServerComponentState $env:ComputerName –Component HubTransport –State Draining –Requester Maintenance
+          Set-ServerComponentState -Identity $env:ComputerName –Component HubTransport –State Draining –Requester Maintenance
           Sleep -Seconds 5
 
           # Bestehende Mails werden aus der Queue auf einen anderen Server verschoben
@@ -63,7 +63,7 @@
           Write-Host "Datenbanken wurden alle evakuiert - keine aktive Datenbankkopie mehr auf $env:ComputerName aktiv"
 
           # Server-Komponenten deaktivieren
-          Set-ServerComponentState $env:ComputerName –Component ServerWideOffline –State InActive –Requester Maintenance
+          Set-ServerComponentState -Identity $env:ComputerName –Component ServerWideOffline –State InActive –Requester Maintenance
           Write-Host "Alle Server-Komponenten deaktiviert"
 
           # Prüfen ob im Wartungsmodus (keine aktiven Datenbanken und ClusterNode not UP)
@@ -110,7 +110,7 @@
       ansible.windows.win_powershell:
         script: |
           Write-Host "Server-Komponeten werden aktiv gesetzt"
-          Set-ServerComponentState $env:ComputerName –Component ServerWideOffline –State Active –Requester Maintenance
+          Set-ServerComponentState -Identity $env:ComputerName –Component ServerWideOffline –State Active –Requester Maintenance
  
           # ClusterNode wieder UP setzen
           Write-Host "ClusterNode wird online genommen"
@@ -125,7 +125,7 @@
  
           # Hub-Transport wieder ACTIVE setzen - Mails werden wieder angenommen
           Write-Host "Hub-Transport wird online genommen - Mails werden wieder angenommen"
-          Set-ServerComponentState $env:ComputerName –Component HubTransport –State Active –Requester Maintenance
+          Set-ServerComponentState -Identity $env:ComputerName –Component HubTransport –State Active –Requester Maintenance
  
           # Aktivierung Defender und PS-Restriction-Policy
           Write-Host "Defender und PS-Policy werden wieder aktiviert"
@@ -157,7 +157,7 @@
           Write-Host "--- Überprüfen aller Server-Komponenten ---" -ForegroundColor Yellow
           Write-Host "Alle Komponenten ACTIVE bis auf ForwardSyncDaemon und ProvisioningRps" -ForegroundColor Yellow
           Write-host "`n"
-          Get-ServerComponentState $env:ComputerName | where {$_.State -ne "Active"} | ft
+          Get-ServerComponentState -Identity $env:ComputerName | where {$_.State -ne "Active"} | ft
           
           Write-Host "Anzeigen aller Datenbanken" -ForegroundColor Yellow
           Write-host "`n"
