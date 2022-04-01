@@ -22,6 +22,9 @@
               echo "Server $env:ComputerName befindet sich bereits im WARTUNGSMODUS" -ForegroundColor Green
               echo "Keine Änderung vorgenommen..." -ForegroundColor Green
               # Exit
+          } else { 
+              echo "Server $env:ComputerName befindet sich nicht im WARTUNGSMODUS" -ForegroundColor Green
+              echo "Es kann weitergehen ..." -ForegroundColor Green
           }
           
       register: exchange_result
