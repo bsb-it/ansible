@@ -1,0 +1,38 @@
+---
+# Playbook for Exchange Server Update
+# WICHTIG: EXCHANGE_TARGET (also anderer DAG-Node) muss definiert sein
+
+- name: Windows Updates Exchange Server
+  hosts:
+    - all
+  serial:
+    - 1
+  # strategy: free
+  gather_facts: yes
+  
+  vars:
+    targetname: '{{ lookup("env", "EXCHANGE_TARGET") }}'
+
+  tasks:
+    - name: PowerShell script Pre-Installation Exchange
+      ansible.windows.win_powershell:
+        script: |
+          # Exchange Module laden
+          Add-PSSnapin Microsoft.Exchange.Management.PowerShell.SnapIn
+          
+          # Prüfen ob bereits im Wartungsmodus (ClusterNode not UP und keine Datenbank aktiv gemountet)
+          # if ((Get-ClusterNode -Name $env:Computername).state -ne "Up" -and (Get-MailboxDatabaseCopyStatus -Server $env:ComputerName | Where {$_.Status -eq "Mounted"}).Count -eq 0) {
+          if ((Get-MailboxDatabaseCopyStatus -Server $env:ComputerName | Where {$_.Status -eq "Mounted"}).Count -eq 0) {
+              echo "Server $env:ComputerName befindet sich bereits im WARTUNGSMODUS"
+              echo "Keine Änderung vorgenommen..."
+              Exit
+          }
+          echo "{{ targetname }}"
+
+      register: exchange_down_result
+
+
+    - name: print variable
+      debug:
+        msg:
+        - '{{ exchange_down_result }}'
