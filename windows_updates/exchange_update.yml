@@ -23,60 +23,61 @@
           # Prüfen ob bereits im Wartungsmodus (ClusterNode not UP und keine Datenbank aktiv gemountet)
           # if ((Get-ClusterNode -Name $env:Computername).state -ne "Up" -and (Get-MailboxDatabaseCopyStatus -Server $env:ComputerName | Where {$_.Status -eq "Mounted"}).Count -eq 0) {
           if ((Get-MailboxDatabaseCopyStatus -Server $env:ComputerName | Where {$_.Status -eq "Mounted"}).Count -eq 0) {
-              Write-Host "Server $env:ComputerName befindet sich bereits im WARTUNGSMODUS" -ForegroundColor Green
-              Write-Host "Keine Änderung vorgenommen..." -ForegroundColor Green
+              echo "Server $env:ComputerName befindet sich bereits im WARTUNGSMODUS"
+              echo "Keine Änderung vorgenommen..."
               Exit
           }
 
           # Sicherheitsfunktionen abschalten (PS-Execution-Policy und Defender)
-          Write-Host "Server $env:ComputerName wird in den Wartungsmodus versetzt..."
-          Write-Host "PS-Policy und Defender werden deaktiviert"
+          echo "Server $env:ComputerName wird in den Wartungsmodus versetzt..."
+          echo "PS-Policy und Defender werden deaktiviert"
           Set-ExecutionPolicy Unrestricted -force
           Set-MpPreference -DisableRealtimeMonitoring $true
           Sleep -Seconds 3
-          Write-Host "PS-Policy unrestriced und Defender deaktiviert"
+          echo "PS-Policy unrestriced und Defender deaktiviert"
 
           # Hub-Transport abschalten
           # Es werden keine Mails mehr angenommen
-          Write-Host "Hub-Transport wird deaktiviert und Mail-Queues verschoben..."
+          echo "Hub-Transport wird deaktiviert und Mail-Queues verschoben..."
           Set-ServerComponentState -Identity $env:ComputerName –Component HubTransport –State Draining –Requester Maintenance
           Sleep -Seconds 5
 
           # Bestehende Mails werden aus der Queue auf einen anderen Server verschoben
           Redirect-Message -Server $env:ComputerName -Target '{{ targetname }}' -Confirm:$false
-          Write-Host "Hub-Transport deaktiviert"
+          echo "Hub-Transport deaktiviert"
 
           # ClusterNode in Suspend-Mode
-          Write-Host "ClusterNode $env:ComputerName wird angehalten"
+          echo "ClusterNode $env:ComputerName wird angehalten"
           Suspend-ClusterNode –Name $env:ComputerName
           Sleep -Seconds 3
-          Write-Host "ClusterNode $env:ComputerName angehalten"
+          echo "ClusterNode $env:ComputerName angehalten"
 
           # Mailbox-Datenbanken verschieben und 
-          Write-Host "Aktive Mailboxdatenbanken werden evakuiert"
+          echo "Aktive Mailboxdatenbanken werden evakuiert"
           Set-MailboxServer $env:ComputerName –DatabaseCopyActivationDisabledAndMoveNow $true
           Set-MailboxServer $env:ComputerName –DatabaseCopyAutoActivationPolicy Blocked
-          Write-Host "Skript wartet, bis Datenbanken evakuiert wurden - Prüfintervall: 30 Sekunden"
+          echo "Skript wartet, bis Datenbanken evakuiert wurden - Prüfintervall: 30 Sekunden"
           While ((Get-MailboxDatabaseCopyStatus -Server $env:ComputerName | Where {$_.Status -eq "Mounted"}).Count -ne 0) 
           {
             Sleep -Seconds 30
           }
-          Write-Host "Datenbanken wurden alle evakuiert - keine aktive Datenbankkopie mehr auf $env:ComputerName aktiv"
+          echo "Datenbanken wurden alle evakuiert - keine aktive Datenbankkopie mehr auf $env:ComputerName aktiv"
 
           # Server-Komponenten deaktivieren
           Set-ServerComponentState -Identity $env:ComputerName –Component ServerWideOffline –State InActive –Requester Maintenance
-          Write-Host "Alle Server-Komponenten deaktiviert"
+          echo "Alle Server-Komponenten deaktiviert"
 
           # Prüfen ob im Wartungsmodus (keine aktiven Datenbanken und ClusterNode not UP)
           # if ((Get-ClusterNode -Name $env:Computername).state -ne "Up" -and (Get-MailboxDatabaseCopyStatus -Server $env:ComputerName | Where {$_.Status -eq "Mounted"}).Count -eq 0) {
             if ((Get-MailboxDatabaseCopyStatus -Server $env:ComputerName | Where {$_.Status -eq "Mounted"}).Count -eq 0) {  
-              Write-Host "Server $env:ComputerName befindet sich im WARTUNGSMODUS" -ForegroundColor Green
+              echo "Server $env:ComputerName befindet sich im WARTUNGSMODUS"
           }
           else {
-              Write-Host "Server $env:ComputerName befindet sich NICHT im WARTUNGSMODUS" -ForegroundColor Red
-              Write-Host "Bitte prüfen Sie die Dienste und Befehle auf Meldungen" -ForegroundColor Red
+              echo "Server $env:ComputerName befindet sich NICHT im WARTUNGSMODUS"
+              echo "Bitte prüfen Sie die Dienste und Befehle auf Meldungen"
+              Exit
           }
-      register: exchange_result
+      register: exchange_down_result
 
 
     - name: Create a snapshot, auf Gross/Kleinschreibung des Hostnamen achten
@@ -111,66 +112,67 @@
     - name: PowerShell script Post-Installation Exchange
       ansible.windows.win_powershell:
         script: |
-          Write-Host "Server-Komponeten werden aktiv gesetzt"
+          echo "Server-Komponeten werden aktiv gesetzt"
           Set-ServerComponentState -Identity $env:ComputerName –Component ServerWideOffline –State Active –Requester Maintenance
  
           # ClusterNode wieder UP setzen
-          Write-Host "ClusterNode wird online genommen"
+          echo "ClusterNode wird online genommen"
           Resume-ClusterNode –Name $env:ComputerName
  
           # Mailbox-Datenbank wieder online setzen und für Rückschwenk aktivieren
           # KEIN aktives zurückschwenken
-          Write-Host "Mailboxdatenbanken werden wieder aktiv genommen"
-          Write-Host "Es wird keine Datenbank aktiv zurückgenommen"
+          echo "Mailboxdatenbanken werden wieder aktiv genommen"
+          echo "Es wird keine Datenbank aktiv zurückgenommen"
           Set-MailboxServer $env:ComputerName –DatabaseCopyAutoActivationPolicy Unrestricted
           Set-MailboxServer $env:ComputerName –DatabaseCopyActivationDisabledAndMoveNow $false
  
           # Hub-Transport wieder ACTIVE setzen - Mails werden wieder angenommen
-          Write-Host "Hub-Transport wird online genommen - Mails werden wieder angenommen"
+          echo "Hub-Transport wird online genommen - Mails werden wieder angenommen"
           Set-ServerComponentState -Identity $env:ComputerName –Component HubTransport –State Active –Requester Maintenance
  
           # Aktivierung Defender und PS-Restriction-Policy
-          Write-Host "Defender und PS-Policy werden wieder aktiviert"
+          echo "Defender und PS-Policy werden wieder aktiviert"
           Set-MpPreference -DisableRealtimeMonitoring $false
           Set-ExecutionPolicy RemoteSigned -force
  
           # Prüfen ob immer noch imWartungsmodus
           # if ((Get-ClusterNode -Name $env:Computername).state -eq "Up") {
-          #    Write-Host "Server $env:ComputerName befindet sich im NORMALMODUS" -ForegroundColor Green
+          #    echo "Server $env:ComputerName befindet sich im NORMALMODUS"
           # }
           # else {
-          #     Write-Host "Server $env:ComputerName befindet sich immer noch im WARTUNGSMODUS" -ForegroundColor Red
-          #     Write-Host "Bitte prüfen Sie die Dienste und Eventlogs auf Fehler" -ForegroundColor Red
+          #     echo "Server $env:ComputerName befindet sich immer noch im WARTUNGSMODUS"
+          #     echo "Bitte prüfen Sie die Dienste und Eventlogs auf Fehler"
           # }
  
           # Prüfroutinen für Dienste und Komponenten - jeweils mit Pause für Prüfung
-          Write-Host "###########################################################" -ForegroundColor Yellow
-          Write-Host "####### Ausgabe aller wichtigen Dienste zur Prüfung #######" -ForegroundColor Yellow
-          Write-Host "###########################################################" -ForegroundColor Yellow
-          write-host "`n"
-          # Write-Host "--- ClusterNode muss UP sein ---" -ForegroundColor Yellow
+          echo "###########################################################"
+          echo "####### Ausgabe aller wichtigen Dienste zur Prüfung #######"
+          echo "###########################################################"
+          echo "`n"
+          # echo "--- ClusterNode muss UP sein ---"
           # Get-ClusterNode –Name $env:ComputerName
          
-          Write-Host "--- Test-ServiceHealth ---" -ForegroundColor Yellow
-          Write-Host "Alle Rollen müssen RequiredServicesRunning auf TRUE stehen" -ForegroundColor Yellow
-          Write-host "`n"
+          echo "--- Test-ServiceHealth ---"
+          echo "Alle Rollen müssen RequiredServicesRunning auf TRUE stehen"
+          echo "`n"
           Test-ServiceHealth | ft -AutoSize
           
-          Write-Host "--- Überprüfen aller Server-Komponenten ---" -ForegroundColor Yellow
-          Write-Host "Alle Komponenten ACTIVE bis auf ForwardSyncDaemon und ProvisioningRps" -ForegroundColor Yellow
-          Write-host "`n"
+          echo "--- Überprüfen aller Server-Komponenten ---"
+          echo "Alle Komponenten ACTIVE bis auf ForwardSyncDaemon und ProvisioningRps"
+          echo "`n"
           Get-ServerComponentState -Identity $env:ComputerName | where {$_.State -ne "Active"} | ft
           
-          Write-Host "Anzeigen aller Datenbanken" -ForegroundColor Yellow
-          Write-host "`n"
+          echo "Anzeigen aller Datenbanken"
+          echo "`n"
           Get-MailboxDatabaseCopyStatus -Server $env:ComputerName | ft
-          Write-Host "Fertig!" -ForegroundColor Green
-      register: exchange_result
-
+          echo "Fertig!"
+      register: exchange_up_result
 
 
     - name: print variable
       debug:
         msg:
         - '{{ update_result }}'
-        - '{{ exchange_result }}'
+        - '{{ exchange_down_result }}'
+        - '{{ exchange_up_result }}'
+        
