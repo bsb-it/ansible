@@ -9,9 +9,6 @@
     - 1
   # strategy: free
   gather_facts: yes
-  
-  vars:
-    targetname: '{{ lookup("env", "EXCHANGE_TARGET") }}'
 
   tasks:
     - name: PowerShell script Pre-Installation Exchange
@@ -43,7 +40,7 @@
           Sleep -Seconds 5
 
           # Bestehende Mails werden aus der Queue auf einen anderen Server verschoben
-          Redirect-Message -Server $env:ComputerName -Target '{{ targetname }}' -Confirm:$false
+          Redirect-Message -Server $env:ComputerName -Target '{{ EXCHANGE_TARGET }}' -Confirm:$false
           echo "Hub-Transport deaktiviert"
 
           # ClusterNode in Suspend-Mode
