@@ -109,6 +109,9 @@
     - name: PowerShell script Post-Installation Exchange
       ansible.windows.win_powershell:
         script: |
+          # Exchange Module laden
+          Add-PSSnapin Microsoft.Exchange.Management.PowerShell.SnapIn
+        
           echo "Server-Komponeten werden aktiv gesetzt"
           Set-ServerComponentState -Identity $env:ComputerName –Component ServerWideOffline –State Active –Requester Maintenance
  
