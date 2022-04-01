@@ -28,6 +28,7 @@
               Exit
           }
           echo "{{ targetname }}"
+          echo "{{ EXCHANGE_TARGET }}"
 
       register: exchange_down_result
 
