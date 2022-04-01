@@ -9,9 +9,6 @@
     - 1
   # strategy: free
   gather_facts: yes
-  
-  vars:
-    targetname: '{{ lookup("env", "EXCHANGE_TARGET") }}'
 
   tasks:
     - name: PowerShell script Pre-Installation Exchange
@@ -27,7 +24,10 @@
               echo "Keine Änderung vorgenommen..."
               Exit
           }
-          echo "{{ targetname }}"
+          
+          Get-MailboxDatabaseCopyStatus -Server {{ EXCHANGE_TARGET }}
+          
+          echo {{ EXCHANGE_TARGET }}
           echo "{{ EXCHANGE_TARGET }}"
 
       register: exchange_down_result
