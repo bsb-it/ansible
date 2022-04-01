@@ -19,12 +19,12 @@
           
           # Prüfen ob bereits im Wartungsmodus (ClusterNode not UP und keine Datenbank aktiv gemountet)
           if ((Get-MailboxDatabaseCopyStatus -Server $env:ComputerName | Where {$_.Status -eq "Mounted"}).Count -eq 0) {
-              echo "Server $env:ComputerName befindet sich bereits im WARTUNGSMODUS" -ForegroundColor Green
-              echo "Keine Änderung vorgenommen..." -ForegroundColor Green
+              Write-Host "Server $env:ComputerName befindet sich bereits im WARTUNGSMODUS" -ForegroundColor Green
+              Write-Host "Keine Änderung vorgenommen..." -ForegroundColor Green
               # Exit
           } else { 
-              echo "Server $env:ComputerName befindet sich nicht im WARTUNGSMODUS" -ForegroundColor Green
-              echo "Es kann weitergehen ..." -ForegroundColor Green
+              Write-Host "Server $env:ComputerName befindet sich nicht im WARTUNGSMODUS" -ForegroundColor Green
+              Write-Host "Es kann weitergehen ..." -ForegroundColor Green
           }
           
       register: exchange_result
