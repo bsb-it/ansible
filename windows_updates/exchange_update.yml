@@ -66,7 +66,7 @@
 
           # Prüfen ob im Wartungsmodus (keine aktiven Datenbanken und ClusterNode not UP)
           # if ((Get-ClusterNode -Name $env:Computername).state -ne "Up" -and (Get-MailboxDatabaseCopyStatus -Server $env:ComputerName | Where {$_.Status -eq "Mounted"}).Count -eq 0) {
-            if ((Get-MailboxDatabaseCopyStatus -Server $env:ComputerName | Where {$_.Status -eq "Mounted"}).Count -eq 0) {  
+          if ((Get-MailboxDatabaseCopyStatus -Server $env:ComputerName | Where {$_.Status -eq "Mounted"}).Count -eq 0) {  
               echo "Server $env:ComputerName befindet sich im WARTUNGSMODUS"
           }
           else {
