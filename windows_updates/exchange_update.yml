@@ -130,6 +130,14 @@
           echo "Hub-Transport wird online genommen - Mails werden wieder angenommen"
           Set-ServerComponentState -Identity $env:ComputerName –Component HubTransport –State Active –Requester Maintenance
  
+          # Anpassung für mehr als 500 OU's
+          # https://blog.icewolf.ch/archive/2020/11/30/ou-picker-in-exchange-2016-does-not-show-the-list.aspx
+          copy C:\Web-Config\Web.config 'C:\Program Files\Microsoft\Exchange Server\V15\ClientAccess\ecp\Web.config'
+          iisreset /restart
+          
+          # Logs aufräumen
+          C:\Web-Config\ClenupLogs.ps1
+ 
           # Aktivierung Defender und PS-Restriction-Policy
           echo "Defender und PS-Policy werden wieder aktiviert"
           Set-MpPreference -DisableRealtimeMonitoring $false
