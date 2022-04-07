@@ -1,0 +1,89 @@
+---
+# Playbook for Exchange Server Update
+# Aktivieren des Nodes
+
+- name: Windows Updates Exchange Server
+  hosts:
+    - all
+  serial:
+    - 1
+  # strategy: free
+  gather_facts: yes
+
+  tasks:
+    - name: PowerShell script Post-Installation Exchange
+      ansible.windows.win_powershell:
+        script: |
+          # Exchange Module laden
+          Add-PSSnapin Microsoft.Exchange.Management.PowerShell.SnapIn
+        
+          echo "Server-Komponeten werden aktiv gesetzt"
+          Set-ServerComponentState -Identity $env:ComputerName –Component ServerWideOffline –State Active –Requester Maintenance
+ 
+          # ClusterNode wieder UP setzen
+          echo "ClusterNode wird online genommen"
+          Resume-ClusterNode –Name $env:ComputerName
+ 
+          # Mailbox-Datenbank wieder online setzen und für Rückschwenk aktivieren
+          # KEIN aktives zurückschwenken
+          echo "Mailboxdatenbanken werden wieder aktiv genommen"
+          echo "Es wird keine Datenbank aktiv zurückgenommen"
+          Set-MailboxServer $env:ComputerName –DatabaseCopyAutoActivationPolicy Unrestricted
+          Set-MailboxServer $env:ComputerName –DatabaseCopyActivationDisabledAndMoveNow $false
+ 
+          # Hub-Transport wieder ACTIVE setzen - Mails werden wieder angenommen
+          echo "Hub-Transport wird online genommen - Mails werden wieder angenommen"
+          Set-ServerComponentState -Identity $env:ComputerName –Component HubTransport –State Active –Requester Maintenance
+ 
+          # Anpassung für mehr als 500 OU's
+          # https://blog.icewolf.ch/archive/2020/11/30/ou-picker-in-exchange-2016-does-not-show-the-list.aspx
+          copy C:\Web-Config\Web.config 'C:\Program Files\Microsoft\Exchange Server\V15\ClientAccess\ecp\Web.config'
+          iisreset /restart
+          
+          # Logs aufräumen
+          C:\Web-Config\ClenupLogs.ps1
+ 
+          # Aktivierung Defender und PS-Restriction-Policy
+          echo "Defender und PS-Policy werden wieder aktiviert"
+          Set-MpPreference -DisableRealtimeMonitoring $false
+          Set-ExecutionPolicy RemoteSigned -force
+ 
+          # Prüfen ob immer noch imWartungsmodus
+          # if ((Get-ClusterNode -Name $env:Computername).state -eq "Up") {
+          #    echo "Server $env:ComputerName befindet sich im NORMALMODUS"
+          # }
+          # else {
+          #     echo "Server $env:ComputerName befindet sich immer noch im WARTUNGSMODUS"
+          #     echo "Bitte prüfen Sie die Dienste und Eventlogs auf Fehler"
+          # }
+ 
+          # Prüfroutinen für Dienste und Komponenten - jeweils mit Pause für Prüfung
+          echo "###########################################################"
+          echo "####### Ausgabe aller wichtigen Dienste zur Prüfung #######"
+          echo "###########################################################"
+          echo "`n"
+          # echo "--- ClusterNode muss UP sein ---"
+          # Get-ClusterNode –Name $env:ComputerName
+         
+          echo "--- Test-ServiceHealth ---"
+          echo "Alle Rollen müssen RequiredServicesRunning auf TRUE stehen"
+          echo "`n"
+          Test-ServiceHealth | ft -AutoSize
+          
+          echo "--- Überprüfen aller Server-Komponenten ---"
+          echo "Alle Komponenten ACTIVE bis auf ForwardSyncDaemon und ProvisioningRps"
+          echo "`n"
+          Get-ServerComponentState -Identity $env:ComputerName | where {$_.State -ne "Active"} | ft
+          
+          echo "Anzeigen aller Datenbanken"
+          echo "`n"
+          Get-MailboxDatabaseCopyStatus -Server $env:ComputerName | ft
+          echo "Fertig!"
+      register: exchange_up_result
+
+
+    - name: print variable
+      debug:
+        msg:
+        - '{{ exchange_up_result }}'
+        
