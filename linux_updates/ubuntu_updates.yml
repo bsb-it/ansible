@@ -1,9 +1,12 @@
 ---
 - name: Playbook to Patch Linux Server  
-  hosts: all
+  hosts:
+    - all
+  serial:
+    - 1
   gather_facts: no
-  tasks:
 
+  tasks:
     - name: Create a snapshot, auf Gross/Kleinschreibung des Hostnamen achten
       community.vmware.vmware_guest_snapshot:
         hostname: '{{ lookup("env", "VMWARE_HOST") }}'
