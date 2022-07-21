@@ -8,7 +8,7 @@
     - 1
   # strategy: free
   
-  # become: false
+  become: false
   gather_facts: false
   
   tasks:
