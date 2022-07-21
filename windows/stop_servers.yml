@@ -6,9 +6,9 @@
     - all
   serial:
     - 1
-  #  strategy: free
+  # strategy: free
   
-  become: false
+  # become: false
   gather_facts: false
   
   tasks:
