@@ -20,5 +20,5 @@
         validate_certs: false
         datacenter: "{{ datacenter_name }}"
         folder: /
-        moid: "{{ inventory_hostname_short }}"
+        name: "{{ inventory_hostname_short }}"
         state: powered-on
