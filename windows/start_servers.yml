@@ -18,7 +18,7 @@
         username: '{{ lookup("env", "VMWARE_USER") }}'
         password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
         validate_certs: false
-        datacenter: "{{ datacenter_name }}"
-        folder: /
+        # datacenter: "{{ datacenter_name }}"
+        # folder: /
         name: "{{ vm_name }}"
         state: powered-on
