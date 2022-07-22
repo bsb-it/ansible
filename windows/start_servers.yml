@@ -3,7 +3,7 @@
 
 - name: VM-guest Power-On
   hosts:
-    - all
+    - localhost
   serial:
     - 1
   # strategy: free
