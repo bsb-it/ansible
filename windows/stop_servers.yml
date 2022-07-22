@@ -3,7 +3,7 @@
 
 - name: VM-guest Halt und Power-Off
   hosts:
-    - all
+    - localhost
   serial:
     - 1
   # strategy: free
@@ -20,7 +20,7 @@
         validate_certs: false
         # datacenter: "{{ datacenter_name }}"
         # folder: /
-        name: "{{ inventory_hostname_short }}"
+        name: "{{ vm_name }}"
         state: shutdown-guest
         state_change_timeout: 120
       register: shutdown
@@ -34,6 +34,6 @@
         validate_certs: false
         # datacenter: "{{ datacenter_name }}"
         # folder: /
-        name: "{{ inventory_hostname_short }}"
+        name: "{{ vm_name }}"
         state: powered-off
       when: shutdown.failed
