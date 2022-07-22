@@ -1,0 +1,24 @@
+---
+# Stop Server
+
+- name: VM-guest Power-On
+  hosts:
+    - all
+  serial:
+    - 1
+  # strategy: free
+  
+  become: false
+  gather_facts: false
+  
+  tasks:
+    - name: poweron
+      community.vmware.vmware_guest_powerstate:
+        hostname: '{{ lookup("env", "VMWARE_HOST") }}'
+        username: '{{ lookup("env", "VMWARE_USER") }}'
+        password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
+        validate_certs: false
+        # datacenter: "{{ datacenter_name }}"
+        # folder: /
+        name: "{{ inventory_hostname_short }}"
+        state: powered-on
