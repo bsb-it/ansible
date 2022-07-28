@@ -1,5 +1,5 @@
 ---
-# Set DNS-Servers
+# Set DNS-Servers and disable Netbios
 
 - name: Festlegen der DNS-Server
   hosts:
@@ -8,6 +8,8 @@
     - 1
   #  strategy: free
   
+  gather_facts: false
+  
   tasks:
     - name: Set DNS-Servers for all adapters which name begins with "Ethernet"
       ansible.windows.win_dns_client:
@@ -15,4 +17,7 @@
         dns_servers:
           - "{{ dnsserver_1 }}"
           - "{{ dnsserver_2 }}"
- 
+          
+    - name: Disable NetBIOS system wide
+      community.windows.win_netbios:
+        state: disabled
