@@ -1,0 +1,26 @@
+---
+- name: Demonstrate how to use OP module to execute various op commands on PANW device
+  hosts: all
+  connection: local
+  # gather_facts: no
+
+  collections:
+    - paloaltonetworks.panos
+    
+  vars:
+    device:
+      ip_address: '{{ ip_address }}'
+      username: '{{ lookup("env", "ANSIBLE_NET_USERNAME") | default(omit) }}'
+      password: '{{ lookup("env", "ANSIBLE_NET_PASSWORD") | default(omit) }}'
+      api_key: '{{ api_key | default(omit) }}'
+
+  tasks:
+    - name: show uncommitted changes
+      panos_op:
+        provider: "{{ device }}"
+        cmd: "show config"
+      register: show_config
+
+    - name: print system info
+      debug:
+        msg: "{{ show_config.stdout }}"
