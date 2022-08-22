@@ -25,3 +25,7 @@
         ntp_server_primary: "192.168.56.130"
         ntp_server_secondary: "192.168.56.132"
       register: result
+
+    - name: commit candidate config on firewall
+      panos_commit:
+        provider: '{{ device }}'
