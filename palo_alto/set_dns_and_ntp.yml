@@ -27,5 +27,5 @@
       register: result
 
     - name: commit candidate config on firewall
-      panos_commit:
+      panos_commit_firewall:
         provider: '{{ device }}'
