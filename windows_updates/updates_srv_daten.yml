@@ -25,6 +25,7 @@
           - SecurityUpdates
           - UpdateRollups
           - Updates
+          - Upgrades
             #state: searched
         reboot: yes
         reboot_timeout: 1200
