@@ -13,12 +13,7 @@
     - name: Search-only, return list of found updates (if any)
       ansible.windows.win_updates:
         category_names:
-          - CriticalUpdates
-          - SecurityUpdates
-          - UpdateRollups
-          - Updates
-          - ServicePacks
-          - Windows11
+          - *
         state: searched
         reboot: no
       register: win_updates
