@@ -13,7 +13,7 @@
     - name: Search-only, return list of found updates (if any)
       ansible.windows.win_updates:
         category_names:
-          - *
+          - '*'
         state: searched
         reboot: no
       register: win_updates
