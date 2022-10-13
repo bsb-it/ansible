@@ -18,6 +18,7 @@
           - UpdateRollups
           - Updates
           - ServicePacks
+          - Windows11
         state: searched
         reboot: no
       register: win_updates
