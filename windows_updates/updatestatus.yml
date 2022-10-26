@@ -5,7 +5,7 @@
   hosts:
     - all
   serial:
-    - 1
+    - 5
   gather_facts: no
   
   tasks:
