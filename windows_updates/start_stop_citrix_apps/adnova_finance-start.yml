@@ -1,0 +1,20 @@
+---
+# Start Adnova
+
+- name: Enable Adnova app in Citrix-Workbench
+  hosts:
+    - all
+  serial:
+    - 1
+  # strategy: free
+  gather_facts: no
+
+  tasks:
+    - name: PowerShell script
+      ansible.windows.win_powershell:
+        script: |
+          $app = Get-BrokerApplication -ApplicationName "ADNOVA"
+          Set-BrokerApplication -InputObject $app -Enabled $true
+          # $app = Get-BrokerApplication -ApplicationName "ADNOVA+"
+          # Set-BrokerApplication -InputObject $app -Enabled $true
+      register: citrixapp
