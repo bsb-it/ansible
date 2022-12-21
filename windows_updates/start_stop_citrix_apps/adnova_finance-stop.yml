@@ -15,6 +15,4 @@
         script: |
           $app = Get-BrokerApplication -ApplicationName "ADNOVA"
           Set-BrokerApplication -InputObject $app -Enabled $false
-          # $app = Get-BrokerApplication -ApplicationName "ADNOVA+"
-          # Set-BrokerApplication -InputObject $app -Enabled $false
       register: citrixapp
