@@ -4,3 +4,4 @@ collections:
 - arista.eos
 - ctxcommunity.common
 - paloaltonetworks.panos
+- geodan.pywinrm
