@@ -3,4 +3,3 @@ collections:
 # Install the Arista EOS collection
 - arista.eos
 - paloaltonetworks.panos
-- geodan.pywinrm
