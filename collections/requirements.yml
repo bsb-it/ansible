@@ -2,4 +2,5 @@
 collections:
 # Install the Arista EOS collection
 - arista.eos
-- irom77.panos
+- ctxcommunity.common
+- paloaltonetworks.panos
