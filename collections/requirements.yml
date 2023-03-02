@@ -4,3 +4,4 @@ collections:
 - arista.eos
 - paloaltonetworks.panos
 - chocolatey.chocolatey
+- ansible.builtin
