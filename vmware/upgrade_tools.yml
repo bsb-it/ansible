@@ -28,6 +28,6 @@
         username: '{{ lookup("env", "VMWARE_USER") }}'
         password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
         validate_certs: false
-        datacenter: "{{ datacenter_name }}"
+        # datacenter: "{{ datacenter_name }}"
         uuid: "{{ vm_facts.instance.hw_product_uuid }}"
       delegate_to: localhost
