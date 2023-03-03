@@ -1,5 +1,5 @@
 ---
 collections:
 - arista.eos
-- community.vmware.vmware_tools
+- community.vmware
 - paloaltonetworks.panos
