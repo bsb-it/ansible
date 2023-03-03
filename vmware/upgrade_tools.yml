@@ -12,7 +12,7 @@
   tasks:
   
   - name: Get VM UUID
-    vmware_guest_facts:
+    community.vmware.vmware_guest_facts:
       hostname: '{{ lookup("env", "VMWARE_HOST") }}'
       username: '{{ lookup("env", "VMWARE_USER") }}'
       password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
