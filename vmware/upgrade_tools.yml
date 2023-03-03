@@ -15,9 +15,7 @@
         hostname: '{{ lookup("env", "VMWARE_HOST") }}'
         username: '{{ lookup("env", "VMWARE_USER") }}'
         password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
-        validate_certs: false
         datacenter: "{{ datacenter_name }}"
-        folder: "/{{datacenter}}/vm"
         name: "{{ inventory_hostname_short }}"
       delegate_to: localhost
       register: vm_facts
