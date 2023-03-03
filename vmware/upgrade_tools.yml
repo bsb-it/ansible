@@ -2,7 +2,7 @@
 # Upgrade der VMWare-Tools
 # Abarbeitung nacheinander, nicht parallel
 
-- name: Windows-Updates mit VMware-Snapshot
+- name: Upgrade VMWare-Tools
   hosts:
     - all
   serial:
