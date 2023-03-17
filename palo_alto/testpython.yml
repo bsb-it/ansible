@@ -7,3 +7,9 @@
   tasks:
     - name: debug Python packages installed
       ansible.builtin.shell: pip list
+      
+    - name: install Python package
+      ansible.builtin.shell: pip install pan-os-python
+      
+    - name: debug Python packages installed
+      ansible.builtin.shell: pip list
