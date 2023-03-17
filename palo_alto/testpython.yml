@@ -1,0 +1,3 @@
+tasks:
+    - name: debug Python packages installed
+      ansible.builtin.shell: pip freeze
