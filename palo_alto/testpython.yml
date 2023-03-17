@@ -1,3 +1,9 @@
-tasks:
+---
+- name: Test Python
+  hosts: all
+  connection: local
+  # gather_facts: no
+
+  tasks:
     - name: debug Python packages installed
-      ansible.builtin.shell: pip freeze
+      ansible.builtin.shell: pip list
