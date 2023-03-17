@@ -4,8 +4,8 @@
   connection: local
   # gather_facts: no
 
-  #collections:
-  #  - paloaltonetworks.panos
+  collections:
+    - paloaltonetworks.panos
     
   vars:
     device:
