@@ -13,6 +13,7 @@
       username: '{{ lookup("env", "ANSIBLE_NET_USERNAME") | default(omit) }}'
       password: '{{ lookup("env", "ANSIBLE_NET_PASSWORD") | default(omit) }}'
       api_key: '{{ api_key | default(omit) }}'
+    ansible_python_interpreter: /usr/bin/python3
 
   tasks:
     - name: Show all interfaces using
