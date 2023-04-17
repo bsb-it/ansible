@@ -76,6 +76,11 @@
               Exit
           }
       register: exchange_down_result
+      become: yes
+      become_method: runas
+      become_user: '{{ server_usr_name }}'
+      vars:
+        ansible_become_pass: '{{ server_usr_password }}'
 
     - name: print variable
       debug:
