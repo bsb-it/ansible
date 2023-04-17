@@ -70,7 +70,7 @@
       register: exchange_down_result
       become: yes
       become_method: runas
-      become_user: exchange-admin@DOMAIN
+      become_user: '{{ build_usr_name }}'
       vars:
         ansible_become_pass: '{{ build_usr_password }}'
 
