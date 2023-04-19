@@ -9,12 +9,14 @@
     - WELO001
     - ELO001
     - ELO002
+    - ELO003
+    - ELO004
     - ELODX002
     - ELODX001
     # ELO01, noch Server 2008 R2
   serial:
     - 1
-    - 3
+    - 5
     - 2
   #  strategy: free
   
