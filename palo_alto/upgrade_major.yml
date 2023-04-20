@@ -57,7 +57,7 @@
   tasks:
 
     - name: Check latest content
-      paloaltonetworks.panos.panos_op:
+      panos_op:
         provider: '{{ device }}'
         cmd: 'request content upgrade check'
       register: check
