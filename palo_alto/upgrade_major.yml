@@ -82,7 +82,7 @@
         cmd: 'show jobs id {{ (download.stdout | from_json).response.result.job }}'
       register: download_job
       until: download_job is not failed and (download_job.stdout | from_json).response.result.job.status == 'FIN'
-      retries: 20
+      retries: 10
       delay: 60
 
     - name: Install latest content
@@ -102,7 +102,7 @@
         cmd: 'show jobs id {{ (install.stdout | from_json).response.result.job }}'
       register: install_job
       until: install_job is not failed and (install_job.stdout | from_json).response.result.job.status == 'FIN'
-      retries: 10
+      retries: 20
       delay: 60  
 
     - name: Backup device config
@@ -110,6 +110,14 @@
         provider: '{{ device }}'
         cmd: 'save config to {{ backup_filename }}'
       when: backup_config|bool  
+  
+    - name: Download PAN-OS base version
+      paloaltonetworks.panos.panos_software:
+        provider: '{{ device }}'
+        version: '{{ base_version }}'
+        download: true
+        install: false
+        restart: false
   
     - name: Install target PAN-OS version
       paloaltonetworks.panos.panos_software:
