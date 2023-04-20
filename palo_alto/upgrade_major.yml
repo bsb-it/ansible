@@ -35,6 +35,9 @@
 
 - hosts: all
   connection: local
+  
+  collections:
+    - paloaltonetworks.panos
 
   vars:
     device:
