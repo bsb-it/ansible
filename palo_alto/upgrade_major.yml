@@ -105,15 +105,6 @@
       retries: 10
       delay: 60  
 
-    - name: Download PAN-OS version
-      paloaltonetworks.panos.panos_software:
-        provider: '{{ device }}'
-        version: '{{ base_version }}'
-        sync_to_peer: '{{ sync_to_peer }}'
-        download: true
-        install: false
-        restart: false
-
     - name: Backup device config
       paloaltonetworks.panos.panos_op:
         provider: '{{ device }}'
