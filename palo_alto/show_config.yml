@@ -15,6 +15,9 @@
       api_key: '{{ api_key | default(omit) }}'
 
   tasks:
+    - name: install Python package
+      ansible.builtin.shell: pip install pan-os-python 
+ 
     - name: show uncommitted changes
       panos_op:
         provider: "{{ device }}"
