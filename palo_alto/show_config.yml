@@ -21,7 +21,7 @@
     - name: show uncommitted changes
       panos_op:
         provider: "{{ device }}"
-        cmd: 'show interface all'
+        cmd: 'show config'
       register: show_config
 
     - name: print system info
