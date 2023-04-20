@@ -25,7 +25,7 @@
 #   target: Target PAN-OS device, as named in the inventory.  See `host_vars/firewall.yml` for sample 
 #           definition of host variables.
 #
-#   version: Version to install.
+#   target_version: Version to install.
 #
 # See the VARS section of the playbook for additional customization options.
 #
@@ -68,7 +68,7 @@
     - name: Install target PAN-OS version
       paloaltonetworks.panos.panos_software:
         provider: '{{ device }}'
-        version: '{{ version }}'
+        version: '{{ target_version }}'
         restart: true
 
     - name: Pause for restart
