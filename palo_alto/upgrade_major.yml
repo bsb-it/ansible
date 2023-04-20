@@ -55,6 +55,8 @@
     sync_to_peer: False
 
   tasks:
+    - name: install Python package
+      ansible.builtin.shell: pip install pan-os-python
 
     - name: Check latest content
       panos_op:
