@@ -46,7 +46,7 @@
           # Aktivierung Defender und PS-Restriction-Policy
           echo "Defender und PS-Policy werden wieder aktiviert"
           Set-MpPreference -DisableRealtimeMonitoring $false
-          Set-ExecutionPolicy RemoteSigned -force
+          Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -force
  
           # Prüfen ob immer noch imWartungsmodus
           # if ((Get-ClusterNode -Name $env:Computername).state -eq "Up") {
