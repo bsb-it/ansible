@@ -29,7 +29,7 @@
           # Sicherheitsfunktionen abschalten (PS-Execution-Policy und Defender)
           echo "Server $env:ComputerName wird in den Wartungsmodus versetzt..."
           echo "PS-Policy und Defender werden deaktiviert"
-          Set-ExecutionPolicy Unrestricted -force
+          Set-ExecutionPolicy -ExecutionPolicy Unrestricted -force
           Set-MpPreference -DisableRealtimeMonitoring $true
           Sleep -Seconds 3
           echo "PS-Policy unrestriced und Defender deaktiviert"
