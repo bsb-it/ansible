@@ -12,7 +12,7 @@
 
     - name: Get info for a single service
       ansible.windows.win_service_info:
-        name: {{ WINDOWS_SERVICE_NAME }}
+        name: "{{ WINDOWS_SERVICE_NAME }}"
       register: service_info
 
     - name: print variable
