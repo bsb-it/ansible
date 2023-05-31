@@ -1,0 +1,16 @@
+---
+# Windows-Dienst starten
+
+- name: Windows-Dienst starten
+  hosts:
+    - all
+  serial:
+    - 1
+  #  strategy: free
+  
+  tasks:
+
+    - name: Start a service
+      ansible.windows.win_service:
+        name: "{{ WINDOWS_SERVICE_NAME }}"
+        state: started
