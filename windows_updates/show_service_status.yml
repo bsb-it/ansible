@@ -1,0 +1,21 @@
+---
+# Windows-Dienst stoppen
+
+- name: Windows-Dienst stoppen
+  hosts:
+    - all
+  serial:
+    - 1
+  #  strategy: free
+  
+  tasks:
+
+    - name: search and install updates und Logfile schreiben
+    - name: Get info for a single service
+      ansible.windows.win_service_info:
+        name: smartFix*
+      register: service_info
+
+    - name: print variable
+      debug:
+        msg: '{{ service_info }}'
