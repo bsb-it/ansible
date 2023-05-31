@@ -1,7 +1,7 @@
 ---
-# Windows-Dienst stoppen
+# Windows-Dienst Status anzeigen
 
-- name: Windows-Dienst stoppen
+- name: Windows-Dienst Status
   hosts:
     - all
   serial:
@@ -12,7 +12,11 @@
 
     - name: Get info for a single service
       ansible.windows.win_service_info:
-        name: smartFix*
+        name:
+          - smartFIX Activator
+          - smartFIX CoordinatorKernel
+          - smartFIX Monitor
+          
       register: service_info
 
     - name: print variable
