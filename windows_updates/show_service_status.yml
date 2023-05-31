@@ -14,9 +14,6 @@
       ansible.windows.win_service_info:
         name:
           - smartFIX Activator
-          - smartFIX CoordinatorKernel
-          - smartFIX Monitor
-          
       register: service_info
 
     - name: print variable
