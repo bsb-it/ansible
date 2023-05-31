@@ -10,7 +10,6 @@
   
   tasks:
 
-    - name: search and install updates und Logfile schreiben
     - name: Get info for a single service
       ansible.windows.win_service_info:
         name: smartFix*
