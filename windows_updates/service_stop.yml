@@ -1,0 +1,16 @@
+---
+# Windows-Dienst stoppen
+
+- name: Windows-Dienst stoppen
+  hosts:
+    - all
+  serial:
+    - 1
+  #  strategy: free
+  
+  tasks:
+
+    - name: Stop a service
+      ansible.windows.win_service:
+        name: "{{ WINDOWS_SERVICE_NAME }}"
+        state: stopped
