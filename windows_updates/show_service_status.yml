@@ -12,8 +12,7 @@
 
     - name: Get info for a single service
       ansible.windows.win_service_info:
-        name:
-          - smartFIX Activator
+        name: smartFIX Activator
       register: service_info
 
     - name: print variable
