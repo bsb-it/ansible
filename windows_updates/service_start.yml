@@ -7,6 +7,7 @@
   serial:
     - 1
   #  strategy: free
+  gather_facts: no
   
   tasks:
 
