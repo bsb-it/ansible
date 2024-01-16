@@ -1,0 +1,13 @@
+---
+- name: Debug Kerberos Authentication
+  hosts: localhost
+  gather_facts: false
+  tasks:
+
+    - name: Ensure /etc/krb5.conf is mounted
+      ansible.builtin.debug:
+        msg: "{{ lookup( 'file', '/etc/krb5.conf' ) }}"
+
+    - name: Pause for specified minutes for debugging
+      ansible.builtin.pause:
+        minutes: 10
