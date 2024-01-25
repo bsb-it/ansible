@@ -20,12 +20,12 @@
       delegate_to: localhost
       register: vm_facts
 
-  #  - name: Upgrade VMware Tools using uuid
-  #    community.vmware.vmware_guest_tools_upgrade:
-  #      hostname: '{{ lookup("env", "VMWARE_HOST") }}'
-  #      username: '{{ lookup("env", "VMWARE_USER") }}'
-  #      password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
-  #      validate_certs: false
-  #      datacenter: "{{ datacenter_name }}"
-  #      moid: "{{ inventory_hostname_short }}"
-  #    delegate_to: localhost
+    - name: Upgrade VMware Tools using uuid
+      community.vmware.vmware_guest_tools_upgrade:
+        hostname: '{{ lookup("env", "VMWARE_HOST") }}'
+        username: '{{ lookup("env", "VMWARE_USER") }}'
+        password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
+        validate_certs: false
+        datacenter: "{{ datacenter_name }}"
+        uuid: "{{ vm_facts.instance.hw_product_uuid }}"
+      delegate_to: localhost
