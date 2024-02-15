@@ -14,6 +14,7 @@
   tasks:
     - name: PowerShell script Pre-Installation Exchange
       ansible.windows.win_powershell:
+        become_user: "{{ lookup('env','USER') }}"
         script: |
           # Exchange Module laden
           Add-PSSnapin Microsoft.Exchange.Management.PowerShell.SnapIn
