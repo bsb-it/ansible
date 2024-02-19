@@ -11,14 +11,8 @@
   # strategy: free
   gather_facts: yes
 
-  tasks:
-    - debug: var=ansible_user
-    - debug: var=ansible_host
-    - debug: var=become_user
-    - debug: var=build_usr_name
-    
+  tasks:    
     - name: PowerShell script Pre-Installation Exchange
-      become_user: "{{ ansible_user }}"
       ansible.windows.win_powershell:
         script: |
           # Exchange Module laden
