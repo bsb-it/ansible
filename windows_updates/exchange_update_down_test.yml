@@ -12,6 +12,11 @@
   gather_facts: yes
 
   tasks:
+    - debug: var=ansible_user
+    - debug: var=ansible_host
+    - debug: var=become_user
+    - debug: var=build_usr_name
+    
     - name: PowerShell script Pre-Installation Exchange
       ansible.windows.win_powershell:
         script: |
