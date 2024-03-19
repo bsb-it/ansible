@@ -14,7 +14,7 @@
         script: |
           Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* |
             Sort Displayname |
-            Select-Object DisplayName, DisplayVersion, InstallDate, Publisher |
+            Select-Object DisplayName, DisplayVersion, Publisher |
             where publisher -contains "LAND-DATA GmbH"
       register: version
     
