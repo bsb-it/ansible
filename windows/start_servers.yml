@@ -3,7 +3,13 @@
 
 - name: VM-guest Power-On
   hosts:
-    - localhost
+    - ELOSQL001
+    - ELO001
+    - ELO002
+    - ELO003
+    - ELO004
+    - ELODX001
+    - ELODX002
   serial:
     - 1
   # strategy: free
