@@ -3,13 +3,7 @@
 
 - name: VM-guest Halt und Power-Off
   hosts:
-    - ELODX002
-    - ELODX001
-    - ELO004
-    - ELO003
-    - ELO002
-    - ELO001
-    - ELOSQL001
+    - localhost
   serial:
     - 1
   # strategy: free
