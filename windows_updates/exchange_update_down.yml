@@ -14,7 +14,7 @@
   tasks:
     - name: PowerShell script Pre-Installation Exchange
       ansible.windows.win_powershell:
-        become_user: "{{ lookup('env','USER') }}"
+        # become_user: "{{ lookup('env','USER') }}"
         script: |
           # Exchange Module laden
           Add-PSSnapin Microsoft.Exchange.Management.PowerShell.SnapIn
@@ -77,11 +77,11 @@
               Exit
           }
       register: exchange_down_result
-      become: yes
-      become_method: runas
-      become_user: '{{ server_usr_name }}'
-      vars:
-        ansible_become_pass: '{{ server_usr_password }}'
+      #become: yes
+      #become_method: runas
+      #become_user: '{{ server_usr_name }}'
+      #vars:
+      #  ansible_become_pass: '{{ server_usr_password }}'
 
     - name: print variable
       debug:
