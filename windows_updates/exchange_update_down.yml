@@ -27,13 +27,16 @@
               Exit
           }
 
-          # Sicherheitsfunktionen abschalten (PS-Execution-Policy und Defender)
           echo "Server $env:ComputerName wird in den Wartungsmodus versetzt..."
-          echo "PS-Policy und Defender werden deaktiviert"
+
+          # Sicherheitsfunktionen abschalten (PS-Execution-Policy und Defender)
+          #echo "PS-Policy und Defender werden deaktiviert"
           Set-ExecutionPolicy -ExecutionPolicy Unrestricted -force
-          Set-MpPreference -DisableRealtimeMonitoring $true
-          Sleep -Seconds 3
-          echo "PS-Policy unrestriced und Defender deaktiviert"
+          echo "PS-Policy unrestriced"
+          # Set-MpPreference -DisableRealtimeMonitoring $true
+          # Sleep -Seconds 3
+          # echo "PS-Policy unrestriced und Defender deaktiviert"
+          
 
           # Hub-Transport abschalten
           # Es werden keine Mails mehr angenommen
