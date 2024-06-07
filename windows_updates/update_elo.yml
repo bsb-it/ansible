@@ -13,11 +13,14 @@
     - ELO004
     - ELODX002
     - ELODX001
+    - ELOArchiv001
+    
     # ELO01, noch Server 2008 R2
   serial:
     - 1
     - 5
     - 2
+    - 1
   #  strategy: free
   
   tasks:
