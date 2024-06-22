@@ -1,0 +1,16 @@
+---
+# Warning messages in eventlog for AppLocker
+
+- name: Check
+  hosts:
+    - all
+  serial:
+    - 1
+  #  strategy: free
+  
+  tasks:
+    - name: Version
+      ansible.windows.win_powershell:
+        script: |
+          Get-AppLockerFileInformation -EventLog -EventType Audited
+      register: version
