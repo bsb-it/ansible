@@ -13,4 +13,8 @@
       ansible.windows.win_powershell:
         script: |
           Get-AppLockerFileInformation -EventLog -EventType Audited
-      register: version
+      register: applocker
+
+    - name: print variable
+      debug:
+        msg: '{{ applocker.output }}'
