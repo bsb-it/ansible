@@ -50,7 +50,7 @@
 
           # ClusterNode in Suspend-Mode
           echo "ClusterNode $env:ComputerName wird angehalten"
-          Suspend-ClusterNode –Name $env:ComputerName
+          Suspend-ClusterNode -Name $env:ComputerName
           Sleep -Seconds 3
           echo "ClusterNode $env:ComputerName angehalten"
 
