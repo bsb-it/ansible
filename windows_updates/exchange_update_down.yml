@@ -56,8 +56,8 @@
 
           # Mailbox-Datenbanken verschieben und 
           echo "Aktive Mailboxdatenbanken werden evakuiert"
-          Set-MailboxServer $env:ComputerName –DatabaseCopyActivationDisabledAndMoveNow $true
-          Set-MailboxServer $env:ComputerName –DatabaseCopyAutoActivationPolicy Blocked
+          Set-MailboxServer $env:ComputerName -DatabaseCopyActivationDisabledAndMoveNow $true
+          Set-MailboxServer $env:ComputerName -DatabaseCopyAutoActivationPolicy Blocked
           echo "Skript wartet, bis Datenbanken evakuiert wurden - Prüfintervall: 30 Sekunden"
           While ((Get-MailboxDatabaseCopyStatus -Server $env:ComputerName | Where {$_.Status -eq "Mounted"}).Count -ne 0) 
           {
