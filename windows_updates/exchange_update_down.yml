@@ -66,7 +66,7 @@
           echo "Datenbanken wurden alle evakuiert - keine aktive Datenbankkopie mehr auf $env:ComputerName aktiv"
 
           # Server-Komponenten deaktivieren
-          Set-ServerComponentState -Identity $env:ComputerName –Component ServerWideOffline –State InActive –Requester Maintenance
+          Set-ServerComponentState -Identity $env:ComputerName -Component ServerWideOffline -State InActive -Requester Maintenance
           echo "Alle Server-Komponenten deaktiviert"
 
           # Prüfen ob im Wartungsmodus (keine aktiven Datenbanken und ClusterNode not UP)
