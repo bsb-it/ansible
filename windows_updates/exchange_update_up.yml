@@ -28,8 +28,8 @@
           # KEIN aktives zurückschwenken
           echo "Mailboxdatenbanken werden wieder aktiv genommen"
           echo "Es wird keine Datenbank aktiv zurückgenommen"
-          Set-MailboxServer $env:ComputerName –DatabaseCopyAutoActivationPolicy Unrestricted
-          Set-MailboxServer $env:ComputerName –DatabaseCopyActivationDisabledAndMoveNow $false
+          Set-MailboxServer $env:ComputerName -DatabaseCopyAutoActivationPolicy Unrestricted
+          Set-MailboxServer $env:ComputerName -DatabaseCopyActivationDisabledAndMoveNow $false
  
           # Hub-Transport wieder ACTIVE setzen - Mails werden wieder angenommen
           echo "Hub-Transport wird online genommen - Mails werden wieder angenommen"
