@@ -18,7 +18,7 @@
           Add-PSSnapin Microsoft.Exchange.Management.PowerShell.SnapIn
         
           echo "Server-Komponeten werden aktiv gesetzt"
-          Set-ServerComponentState -Identity $env:ComputerName –Component ServerWideOffline –State Active –Requester Maintenance
+          Set-ServerComponentState -Identity $env:ComputerName -Component ServerWideOffline -State Active -Requester Maintenance
  
           # ClusterNode wieder UP setzen
           echo "ClusterNode wird online genommen"
