@@ -63,7 +63,7 @@
           echo "###########################################################"
           echo "`n"
           # echo "--- ClusterNode muss UP sein ---"
-          # Get-ClusterNode –Name $env:ComputerName
+          # Get-ClusterNode -Name $env:ComputerName
          
           echo "--- Test-ServiceHealth ---"
           echo "Alle Rollen müssen RequiredServicesRunning auf TRUE stehen"
