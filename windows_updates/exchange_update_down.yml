@@ -41,7 +41,7 @@
           # Hub-Transport abschalten
           # Es werden keine Mails mehr angenommen
           echo "Hub-Transport wird deaktiviert und Mail-Queues verschoben..."
-          Set-ServerComponentState -Identity $env:ComputerName –Component HubTransport –State Draining –Requester Maintenance
+          Set-ServerComponentState -Identity $env:ComputerName -Component HubTransport -State Draining -Requester Maintenance
           Sleep -Seconds 5
 
           # Bestehende Mails werden aus der Queue auf einen anderen Server verschoben
