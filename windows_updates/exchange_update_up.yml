@@ -22,7 +22,7 @@
  
           # ClusterNode wieder UP setzen
           echo "ClusterNode wird online genommen"
-          Resume-ClusterNode –Name $env:ComputerName
+          Resume-ClusterNode -Name $env:ComputerName
  
           # Mailbox-Datenbank wieder online setzen und für Rückschwenk aktivieren
           # KEIN aktives zurückschwenken
