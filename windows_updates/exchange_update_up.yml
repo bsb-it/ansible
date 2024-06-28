@@ -33,7 +33,7 @@
  
           # Hub-Transport wieder ACTIVE setzen - Mails werden wieder angenommen
           echo "Hub-Transport wird online genommen - Mails werden wieder angenommen"
-          Set-ServerComponentState -Identity $env:ComputerName –Component HubTransport –State Active –Requester Maintenance
+          Set-ServerComponentState -Identity $env:ComputerName -Component HubTransport -State Active -Requester Maintenance
  
           # Anpassung für mehr als 500 OU's
           # https://blog.icewolf.ch/archive/2020/11/30/ou-picker-in-exchange-2016-does-not-show-the-list.aspx
