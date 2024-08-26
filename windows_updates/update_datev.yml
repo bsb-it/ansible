@@ -10,10 +10,12 @@
     - BSBDTV003
     - BSBKDTV001
     - BSBKDTV002
+    - WTSService001
   serial:
     - 1
     - 2
     - 2
+    - 1
   #  strategy: free
   
   tasks:
