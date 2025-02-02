@@ -5,9 +5,9 @@
 
 - name: Windows-Updates mit VMware-Snapshot
   hosts:
-    - ELOSQLDEV01
-    - ELODEV01
-    - ELODEV02
+    - ELOSQLDEV001
+    - ELODEV001
+    - ELODEV002
   serial:
     - 1
   #  strategy: free
