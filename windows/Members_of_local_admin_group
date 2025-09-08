@@ -7,28 +7,11 @@
   serial:
     - 1
   #  strategy: free
-  
+    
   tasks:
     - name: Version
       ansible.windows.win_powershell:
         script: |
-          ---
-# Check Version Adnova+
-
-- name: Check
-  hosts:
-    - all
-  serial:
-    - 1
-  #  strategy: free
-  
-  tasks:
-    - name: Version
-      ansible.windows.win_powershell:
-        script: |
-          Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* |
-            Sort Displayname |
-            Select-Object DisplayName, DisplayVersion, Publisher |
-            where publisher -contains "LAND-DATA GmbH"
+         Get-LocalGroupMember -Group "Administratoren"
       register: version
       register: version
