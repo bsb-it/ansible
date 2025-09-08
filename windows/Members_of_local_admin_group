@@ -13,7 +13,7 @@
       ansible.windows.win_powershell:
         script: |
           Get-LocalGroupMember -Group "Administratoren"
-      register: Members
+      register: members
 
     - name: print variable
       debug:
