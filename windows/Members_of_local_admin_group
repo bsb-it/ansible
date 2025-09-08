@@ -1,16 +1,20 @@
 ---
-# Check Version Adnova+
+# Warning messages in eventlog for AppLocker
 
-- name: Check
+- name: Members_local_admin_group
   hosts:
     - all
   serial:
     - 1
   #  strategy: free
-    
+  
   tasks:
-    - name: Members
+    - name: Local_admins
       ansible.windows.win_powershell:
         script: |
-         Get-LocalGroupMember -Group "Administratoren"
-      register: member
+          Get-LocalGroupMember -Group "Administratoren"
+      register: Members
+
+    - name: print variable
+      debug:
+        msg: '{{ members.output }}'
