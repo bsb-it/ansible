@@ -8,8 +8,8 @@
     - 1
   # strategy: free
   
-  become: false
-  gather_facts: false
+  # become: false
+  # gather_facts: false
   
   tasks:
     - name: Shutdown guest
