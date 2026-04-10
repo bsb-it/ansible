@@ -28,7 +28,7 @@
         password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
         validate_certs: false
         name: "{{ item }}"
-        state: poweredoff
+        state: powered-off
       loop: "{{ target_vms }}"
       when: 
         - item.failed
