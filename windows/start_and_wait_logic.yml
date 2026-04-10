@@ -5,7 +5,7 @@
     password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
     validate_certs: false
     name: "{{ item }}"
-    state: poweredon
+    state: powered-on
 
 - name: "Warte auf VMware Tools von {{ item }}"
   community.vmware.vmware_guest_tools_wait:
