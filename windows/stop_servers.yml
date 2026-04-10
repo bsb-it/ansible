@@ -9,7 +9,7 @@
 
   tasks:
     - name: "Fahre VM {{ vm_name }} kontrolliert herunter"
-      community.vmware.vmware_guest_powerstate:
+      vmware.vmware.vm_powerstate:
         hostname: "{{ lookup('env', 'VMWARE_HOST') }}"
         username: "{{ lookup('env', 'VMWARE_USER') }}"
         password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
@@ -20,7 +20,7 @@
       ignore_errors: yes
 
     - name: "Erzwinge Ausschalten, falls Gast-Shutdown fehlschlägt"
-      community.vmware.vmware_guest_powerstate:
+      vmware.vmware.vm_powerstate:
         hostname: "{{ lookup('env', 'VMWARE_HOST') }}"
         username: "{{ lookup('env', 'VMWARE_USER') }}"
         password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
