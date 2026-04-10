@@ -16,7 +16,7 @@
     password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
     validate_certs: false
     name: "{{ item }}"
-    state: poweredoff
+    state: powered-off
   # Dieser Task wartet faktisch, bis der Status 'poweredoff' erreicht ist
   register: final_status
   until: final_status.instance.hw_power_status == 'poweredOff'
