@@ -3,10 +3,11 @@
   hosts: localhost
   gather_facts: false
   vars:
-    # Diese Variablen können auch als "Survey" in AWX abgefragt werden
-    vm_name: "WEC01" 
-    force_poweroff: false  # Wenn true, wird der "Stecker gezogen" (Hard Stop)
-
+    # Diese Liste kann via AWX Survey (als Liste) überschrieben werden
+    target_vms:
+      - "WEC01"
+      - "WEC02"
+      - "WEC03"
   tasks:
     - name: "Fahre VM {{ vm_name }} kontrolliert herunter"
       community.vmware.vmware_guest_powerstate:
@@ -14,9 +15,10 @@
         username: "{{ lookup('env', 'VMWARE_USER') }}"
         password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
         validate_certs: false
-        name: "{{ vm_name }}"
+        name: "{{ item }}"
         state: shutdown-guest  # Versucht einen sauberen OS-Shutdown via VMware Tools
-      register: shutdown_result
+      loop: "{{ target_vms }}"
+      register: shutdown_results
       ignore_errors: yes
 
     - name: "Erzwinge Ausschalten, falls Gast-Shutdown fehlschlägt"
@@ -25,8 +27,14 @@
         username: "{{ lookup('env', 'VMWARE_USER') }}"
         password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
         validate_certs: false
-        name: "{{ vm_name }}"
+        name: "{{ item }}"
         state: poweredoff
+      loop: "{{ target_vm }}"
       when: 
-        - shutdown_result.failed
+        - item.failed
         - force_poweroff | bool
+
+    - name: "Zusammenfassung anzeigen"
+      debug:
+        msg: "VM {{ item.item }} Status: {{ 'Erfolgreich' if not item.failed else 'Fehlgeschlagen' }}"
+      loop: "{{ shutdown_results.results }}"
