@@ -16,9 +16,11 @@
     password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
     validate_certs: false
     name: "{{ item }}"
-    state: powered-off
-  # Dieser Task wartet faktisch, bis der Status 'poweredoff' erreicht ist
+    state: poweredoff  # In diesem Modus ist das Modul "idempotent"
   register: final_status
-  until: final_status.instance.hw_power_status == 'poweredOff'
-  retries: 30  # 30 Versuche...
-  delay: 10    # ...alle 10 Sekunden = 5 Minuten Zeit zum Herunterfahren
+  # Wir prüfen direkt den Status im Hauptobjekt oder nutzen die eingebaute Logik
+  until: >
+    final_status.instance is defined and 
+    final_status.instance.hw_power_status == 'poweredOff'
+  retries: 30
+  delay: 10
