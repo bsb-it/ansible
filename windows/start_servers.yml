@@ -1,33 +1,17 @@
 ---
-- name: Mehrere VMs nacheinander hochfahren
+- name: VMs nacheinander starten und auf OS-Bereitschaft warten
   hosts: localhost
   gather_facts: false
   vars:
-    # Liste der VMs - kann in AWX über einen Survey überschrieben werden
+    # Die Liste kommt idealerweise aus dem AWX Survey
     #target_vms:
-    #  - "WEC03"
-    #  - "WEC02"
-    #  - "WEC01"
+    #  - "Server_01"
+    #  - "Server_02"
 
   tasks:
-    - name: "Schalte VMs ein"
-      community.vmware.vmware_guest_powerstate:
-        hostname: "{{ lookup('env', 'VMWARE_HOST') }}"
-        username: "{{ lookup('env', 'VMWARE_USER') }}"
-        password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
-        validate_certs: false
-        name: "{{ item }}"
-        state: powered-on  # Schaltet die VM ein
+    - name: "Sequenzieller Start-Prozess"
+      # Wir nutzen einen Block, um mehrere Schritte pro VM im Loop auszuführen
+      include_tasks: start_and_wait_logic.yml
       loop: "{{ target_vms }}"
-      register: start_results
-
-    - name: "Warte optional, bis VMware Tools bereit sind"
-      community.vmware.vmware_guest_tools_wait:
-        hostname: "{{ lookup('env', 'VMWARE_HOST') }}"
-        username: "{{ lookup('env', 'VMWARE_USER') }}"
-        password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
-        validate_certs: false
-        name: "{{ item.item }}"
-      loop: "{{ start_results.results }}"
-      when: item.changed or item.status == 'already_powered_on' # Nur wenn einschalten sinnvoll war
-      ignore_errors: yes
+      loop_control:
+        pause: 5 # Optionale Pause von 5 Sek. zwischen den Servern
