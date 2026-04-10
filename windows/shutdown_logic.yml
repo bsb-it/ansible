@@ -1,3 +1,4 @@
+---
 - name: "Sende Shutdown-Befehl an {{ item }}"
   community.vmware.vmware_guest_powerstate:
     hostname: "{{ lookup('env', 'VMWARE_HOST') }}"
@@ -6,21 +7,22 @@
     validate_certs: false
     name: "{{ item }}"
     state: shutdown-guest
-  register: shutdown_cmd
   ignore_errors: yes
 
-- name: "Warte, bis {{ item }} vollständig ausgeschaltet ist"
-  community.vmware.vmware_guest_powerstate:
+- name: "Warte aktiv, bis {{ item }} den Status poweredOff hat"
+  community.vmware.vmware_guest_info:
     hostname: "{{ lookup('env', 'VMWARE_HOST') }}"
     username: "{{ lookup('env', 'VMWARE_USER') }}"
     password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
     validate_certs: false
     name: "{{ item }}"
-    state: poweredoff  # In diesem Modus ist das Modul "idempotent"
-  register: final_status
-  # Wir prüfen direkt den Status im Hauptobjekt oder nutzen die eingebaute Logik
-  until: >
-    final_status.instance is defined and 
-    final_status.instance.hw_power_status == 'poweredOff'
-  retries: 30
-  delay: 10
+    schema: "vsphere"
+    properties:
+      - runtime.powerState
+  register: vm_info
+  # Die Loop-Wiederholung (until) nutzt die Info-Abfrage
+  until: 
+    - vm_info.instance is defined
+    - vm_info.instance.runtime.powerState == 'poweredOff'
+  retries: 60  # Erhöht auf 60 Versuche
+  delay: 10    # Alle 10 Sekunden = 10 Minuten Puffer
