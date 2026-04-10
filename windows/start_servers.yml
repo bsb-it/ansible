@@ -1,24 +1,33 @@
 ---
-# Stop Server
-
-- name: VM-guest Power-On
-  hosts:
-    - localhost
-  serial:
-    - 1
-  # strategy: free
-  
-  become: false
+- name: Mehrere VMs nacheinander hochfahren
+  hosts: localhost
   gather_facts: false
-  
+  vars:
+    # Liste der VMs - kann in AWX über einen Survey überschrieben werden
+    target_vms:
+      - "WEC03"
+      - "WEC02"
+      - "WEC01"
+
   tasks:
-    - name: poweron
+    - name: "Schalte VMs ein"
       community.vmware.vmware_guest_powerstate:
-        hostname: '{{ lookup("env", "VMWARE_HOST") }}'
-        username: '{{ lookup("env", "VMWARE_USER") }}'
-        password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
+        hostname: "{{ lookup('env', 'VMWARE_HOST') }}"
+        username: "{{ lookup('env', 'VMWARE_USER') }}"
+        password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
         validate_certs: false
-        # datacenter: "{{ datacenter_name }}"
-        # folder: /
-        name: "{{ vm_name }}"
-        state: powered-on
+        name: "{{ item }}"
+        state: poweredon  # Schaltet die VM ein
+      loop: "{{ target_vms }}"
+      register: start_results
+
+    - name: "Warte optional, bis VMware Tools bereit sind"
+      community.vmware.vmware_guest_tools_wait:
+        hostname: "{{ lookup('env', 'VMWARE_HOST') }}"
+        username: "{{ lookup('env', 'VMWARE_USER') }}"
+        password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
+        validate_certs: false
+        name: "{{ item }}"
+      loop: "{{ target_vms }}"
+      when: not item.failed
+      ignore_errors: yes
