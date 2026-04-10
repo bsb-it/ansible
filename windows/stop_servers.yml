@@ -13,7 +13,7 @@
   
   tasks:
     - name: Shutdown guest
-      community.vmware.vmware_guest_powerstate:
+      vmware.vmware.vm_powerstate:
         hostname: '{{ lookup("env", "VMWARE_HOST") }}'
         username: '{{ lookup("env", "VMWARE_USER") }}'
         password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
@@ -27,7 +27,7 @@
       ignore_errors: true
 
     - name: poweroff
-      community.vmware.vmware_guest_powerstate:
+      vmware.vmware.vm_powerstate:
         hostname: '{{ lookup("env", "VMWARE_HOST") }}'
         username: '{{ lookup("env", "VMWARE_USER") }}'
         password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
