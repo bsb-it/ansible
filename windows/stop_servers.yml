@@ -21,20 +21,23 @@
       register: shutdown_results
       ignore_errors: yes
 
-    - name: "Erzwinge Ausschalten, falls Gast-Shutdown fehlschlägt"
+    - name: "Zusammenfassung und Erfolgskontrolle"
+      debug:
+        msg: >
+          VM: {{ item.item }} - 
+          Status: {{ 'Erfolgreich heruntergefahren' if not item.failed 
+          else 'Fehlgeschlagen (evtl. keine VMware Tools)' }}
+      loop: "{{ shutdown_results.results }}"
+
+    # Optionaler Task: Wenn der sanfte Shutdown fehlschlägt, hier hart ausschalten
+    - name: "Erzwinge Ausschalten (Hard Power Off) bei Fehlern"
       community.vmware.vmware_guest_powerstate:
         hostname: "{{ lookup('env', 'VMWARE_HOST') }}"
         username: "{{ lookup('env', 'VMWARE_USER') }}"
         password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
         validate_certs: false
-        name: "{{ item }}"
+        name: "{{ item.item }}"
         state: powered-off
-      loop: "{{ target_vms }}"
-      when: 
-        - item.failed
-        - force_poweroff | bool
-
-    - name: "Zusammenfassung anzeigen"
-      debug:
-        msg: "VM {{ item.item }} Status: {{ 'Erfolgreich' if not item.failed else 'Fehlgeschlagen' }}"
       loop: "{{ shutdown_results.results }}"
+      when: item.failed 
+      # Dieser Task läuft nur für die VMs, die im ersten Schritt einen Fehler geworfen haben
