@@ -27,7 +27,7 @@
         username: "{{ lookup('env', 'VMWARE_USER') }}"
         password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
         validate_certs: false
-        name: "{{ item }}"
-      loop: "{{ target_vms }}"
-      when: not item.failed
+        name: "{{ item.item }}"
+      loop: "{{ start_results.results }}"
+      when: item.changed or item.status == 'already_powered_on' # Nur wenn einschalten sinnvoll war
       ignore_errors: yes
