@@ -1,0 +1,24 @@
+- name: "Sende Shutdown-Befehl an {{ item }}"
+  community.vmware.vmware_guest_powerstate:
+    hostname: "{{ lookup('env', 'VMWARE_HOST') }}"
+    username: "{{ lookup('env', 'VMWARE_USER') }}"
+    password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
+    validate_certs: false
+    name: "{{ item }}"
+    state: shutdown-guest
+  register: shutdown_cmd
+  ignore_errors: yes
+
+- name: "Warte, bis {{ item }} vollständig ausgeschaltet ist"
+  community.vmware.vmware_guest_powerstate:
+    hostname: "{{ lookup('env', 'VMWARE_HOST') }}"
+    username: "{{ lookup('env', 'VMWARE_USER') }}"
+    password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
+    validate_certs: false
+    name: "{{ item }}"
+    state: poweredoff
+  # Dieser Task wartet faktisch, bis der Status 'poweredoff' erreicht ist
+  register: final_status
+  until: final_status.instance.hw_power_status == 'poweredOff'
+  retries: 30  # 30 Versuche...
+  delay: 10    # ...alle 10 Sekunden = 5 Minuten Zeit zum Herunterfahren
