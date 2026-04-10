@@ -4,10 +4,10 @@
   gather_facts: false
   vars:
     # Liste der VMs - kann in AWX über einen Survey überschrieben werden
-    target_vms:
-      - "WEC03"
-      - "WEC02"
-      - "WEC01"
+    #target_vms:
+    #  - "WEC03"
+    #  - "WEC02"
+    #  - "WEC01"
 
   tasks:
     - name: "Schalte VMs ein"
