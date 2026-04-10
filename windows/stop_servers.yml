@@ -1,43 +1,14 @@
 ---
-- name: Virtuelle Maschinen in vSphere herunterfahren
+- name: VMs nacheinander sauber herunterfahren
   hosts: localhost
   gather_facts: false
   vars:
-    # Diese Liste kann via AWX Survey (als Liste) überschrieben werden
+    # Die Liste der VMs aus dem AWX Survey
     #target_vms:
-    #  - "WEC01"
-    #  - "WEC02"
-    #  - "WEC03"
+    #  - "Server_01"
+    #  - "Server_02"
+
   tasks:
-    - name: "Fahre VM {{ vm_name }} kontrolliert herunter"
-      community.vmware.vmware_guest_powerstate:
-        hostname: "{{ lookup('env', 'VMWARE_HOST') }}"
-        username: "{{ lookup('env', 'VMWARE_USER') }}"
-        password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
-        validate_certs: false
-        name: "{{ item }}"
-        state: shutdown-guest  # Versucht einen sauberen OS-Shutdown via VMware Tools
+    - name: "Starte sequenziellen Shutdown-Prozess"
+      include_tasks: shutdown_logic.yml
       loop: "{{ target_vms }}"
-      register: shutdown_results
-      ignore_errors: yes
-
-    - name: "Zusammenfassung und Erfolgskontrolle"
-      debug:
-        msg: >
-          VM: {{ item.item }} - 
-          Status: {{ 'Erfolgreich heruntergefahren' if not item.failed 
-          else 'Fehlgeschlagen (evtl. keine VMware Tools)' }}
-      loop: "{{ shutdown_results.results }}"
-
-    # Optionaler Task: Wenn der sanfte Shutdown fehlschlägt, hier hart ausschalten
-    - name: "Erzwinge Ausschalten (Hard Power Off) bei Fehlern"
-      community.vmware.vmware_guest_powerstate:
-        hostname: "{{ lookup('env', 'VMWARE_HOST') }}"
-        username: "{{ lookup('env', 'VMWARE_USER') }}"
-        password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
-        validate_certs: false
-        name: "{{ item.item }}"
-        state: powered-off
-      loop: "{{ shutdown_results.results }}"
-      when: item.failed 
-      # Dieser Task läuft nur für die VMs, die im ersten Schritt einen Fehler geworfen haben
