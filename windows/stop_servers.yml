@@ -29,7 +29,7 @@
         validate_certs: false
         name: "{{ item }}"
         state: poweredoff
-      loop: "{{ target_vm }}"
+      loop: "{{ target_vms }}"
       when: 
         - item.failed
         - force_poweroff | bool
