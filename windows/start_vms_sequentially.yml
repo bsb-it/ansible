@@ -1,0 +1,17 @@
+- name: "Schalte VM {{ item }} ein"
+  community.vmware.vmware_guest_powerstate:
+    hostname: "{{ lookup('env', 'VMWARE_HOST') }}"
+    username: "{{ lookup('env', 'VMWARE_USER') }}"
+    password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
+    validate_certs: false
+    name: "{{ item }}"
+    state: poweredon
+
+- name: "Warte auf VMware Tools von {{ item }}"
+  community.vmware.vmware_guest_tools_wait:
+    hostname: "{{ lookup('env', 'VMWARE_HOST') }}"
+    username: "{{ lookup('env', 'VMWARE_USER') }}"
+    password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
+    validate_certs: false
+    name: "{{ item }}"
+    timeout: 600 # Wartet maximal 10 Minuten pro Server
