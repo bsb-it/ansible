@@ -4,10 +4,10 @@
   gather_facts: false
   vars:
     # Diese Liste kann via AWX Survey (als Liste) überschrieben werden
-    target_vms:
-      - "WEC01"
-      - "WEC02"
-      - "WEC03"
+    #target_vms:
+    #  - "WEC01"
+    #  - "WEC02"
+    #  - "WEC03"
   tasks:
     - name: "Fahre VM {{ vm_name }} kontrolliert herunter"
       community.vmware.vmware_guest_powerstate:
