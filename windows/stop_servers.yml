@@ -1,39 +1,32 @@
 ---
-# Stop Server
+- name: Virtuelle Maschinen in vSphere herunterfahren
+  hosts: localhost
+  gather_facts: false
+  vars:
+    # Diese Variablen können auch als "Survey" in AWX abgefragt werden
+    vm_name: "WEC01" 
+    force_poweroff: false  # Wenn true, wird der "Stecker gezogen" (Hard Stop)
 
-- name: VM-guest Halt und Power-Off
-  hosts:
-    - all
-  serial:
-    - 1
-  # strategy: free
-  
-  # become: false
-  # gather_facts: false
-  
   tasks:
-    - name: Shutdown guest
-      vmware.vmware.vm_powerstate:
-        hostname: '{{ lookup("env", "VMWARE_HOST") }}'
-        username: '{{ lookup("env", "VMWARE_USER") }}'
-        password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
+    - name: "Fahre VM {{ vm_name }} kontrolliert herunter"
+      community.vmware.vmware_guest_powerstate:
+        hostname: "{{ lookup('env', 'VMWARE_HOST') }}"
+        username: "{{ lookup('env', 'VMWARE_USER') }}"
+        password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
         validate_certs: false
-        datacenter: "{{ datacenter_name }}"
-        folder: /
-        name: "{{ inventory_hostname_short }}"
-        state: shutdown-guest
-        state_change_timeout: 120
-      register: shutdown
-      ignore_errors: true
+        name: "{{ vm_name }}"
+        state: shutdown-guest  # Versucht einen sauberen OS-Shutdown via VMware Tools
+      register: shutdown_result
+      ignore_errors: yes
 
-    - name: poweroff
-      vmware.vmware.vm_powerstate:
-        hostname: '{{ lookup("env", "VMWARE_HOST") }}'
-        username: '{{ lookup("env", "VMWARE_USER") }}'
-        password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
+    - name: "Erzwinge Ausschalten, falls Gast-Shutdown fehlschlägt"
+      community.vmware.vmware_guest_powerstate:
+        hostname: "{{ lookup('env', 'VMWARE_HOST') }}"
+        username: "{{ lookup('env', 'VMWARE_USER') }}"
+        password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
         validate_certs: false
-        datacenter: "{{ datacenter_name }}"
-        folder: /
-        name: "{{ inventory_hostname_short }}"
-        state: powered-off
-      when: shutdown.failed
+        name: "{{ vm_name }}"
+        state: poweredoff
+      when: 
+        - shutdown_result.failed
+        - force_poweroff | bool
