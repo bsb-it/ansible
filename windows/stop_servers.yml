@@ -3,7 +3,7 @@
 
 - name: VM-guest Halt und Power-Off
   hosts:
-    - localhost
+    - all
   serial:
     - 1
   # strategy: free
