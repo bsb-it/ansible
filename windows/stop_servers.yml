@@ -14,7 +14,7 @@
         username: "{{ lookup('env', 'VMWARE_USER') }}"
         password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
         validate_certs: false
-        name: "{{ vm_name }}"
+        name: "{{ inventory_hostname_short }}"
         state: shutdown-guest  # Versucht einen sauberen OS-Shutdown via VMware Tools
       register: shutdown_result
       ignore_errors: yes
@@ -25,7 +25,7 @@
         username: "{{ lookup('env', 'VMWARE_USER') }}"
         password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
         validate_certs: false
-        name: "{{ vm_name }}"
+        name: "{{ inventory_hostname_short }}"
         state: poweredoff
       when: 
         - shutdown_result.failed
