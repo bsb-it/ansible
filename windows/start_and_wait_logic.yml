@@ -15,3 +15,7 @@
     validate_certs: false
     name: "{{ item }}"
     timeout: 600 # Wartet maximal 10 Minuten pro Server
+
+- name: pause for 60 seconds
+    pause:
+      seconds: 60
