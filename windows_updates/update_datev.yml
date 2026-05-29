@@ -10,11 +10,13 @@
     - BSBDTV003
     - BSBKDTV001
     - BSBKDTV002
-    - WTSService001
+    - BSBDTVDMS001
+    - Datev-Service
   serial:
     - 1
     - 2
     - 2
+    - 1
     - 1
   #  strategy: free
   
