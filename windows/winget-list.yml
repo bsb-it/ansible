@@ -1,0 +1,20 @@
+---
+# Show .Net-Versions
+
+- name: Check
+  hosts:
+    - all
+  serial:
+    - 1
+  #  strategy: free
+  
+  tasks:
+    - name: Version
+      ansible.windows.win_powershell:
+        script: |
+          winget list .net
+      register: winget
+
+    - name: print variable
+      debug:
+        msg: '{{ winget.output }}'
