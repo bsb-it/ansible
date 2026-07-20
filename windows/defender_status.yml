@@ -1,0 +1,21 @@
+---
+# Show installation-status of Windows Defender
+
+- name: Check
+  hosts:
+    - all
+  serial:
+    - 1
+  #  strategy: free
+  gather_facts: no
+  
+  tasks:
+    - name: Defender_yes_no
+      ansible.windows.win_powershell:
+        script: |
+          Get-WindowsFeature -Name Windows-Defender
+      register: defender_status
+
+    - name: print variable
+      debug:
+        msg: '{{ defender_status.output }}'
