@@ -14,8 +14,16 @@
       ansible.windows.win_powershell:
         script: |
           Uninstall-WindowsFeature -Name Windows-Defender
-      register: uninstall_defender
+      register: uninstall_defender_result
 
     - name: print variable
       debug:
-        msg: '{{ uninstall_defender.output }}'
+        msg: '{{ uninstall_defender_result.output }}'
+
+    - name: Reboot Server
+      ansible.windows.win_reboot:
+      register: reboot_result
+
+    - name: print variable
+      debug:
+        msg: '{{ reboot_result }}'
