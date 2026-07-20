@@ -1,0 +1,21 @@
+---
+# Uninstall Windows-Defender
+
+- name: Check
+  hosts:
+    - all
+  serial:
+    - 1
+  #  strategy: free
+  gather_facts: no
+  
+  tasks:
+    - name: Version
+      ansible.windows.win_powershell:
+        script: |
+          Uninstall-WindowsFeature -Name Windows-Defender
+      register: uninstall_defender
+
+    - name: print variable
+      debug:
+        msg: '{{ uninstall_defender.output }}'
