@@ -1,6 +1,7 @@
 ---
 - name: Microsoft Edge Stable aktualisieren
-  hosts: windows
+  hosts:
+    - all
   gather_facts: false
 
   tasks:
