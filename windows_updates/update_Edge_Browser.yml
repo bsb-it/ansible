@@ -1,0 +1,82 @@
+---
+- name: Microsoft Edge Stable aktualisieren
+  hosts: windows
+  gather_facts: false
+
+  tasks:
+
+    - name: Installierte Edge-Version ermitteln
+      ansible.windows.win_shell: |
+        $path = "${env:ProgramFiles(x86)}\Microsoft\Edge\Application\msedge.exe"
+
+        if (-not (Test-Path $path)) {
+            $path = "${env:ProgramFiles}\Microsoft\Edge\Application\msedge.exe"
+        }
+
+        if (Test-Path $path) {
+            (Get-Item $path).VersionInfo.ProductVersion
+        }
+        else {
+            exit 1
+        }
+      register: edge_version_before
+      changed_when: false
+
+    - name: Edge Update Service starten
+      ansible.windows.win_service:
+        name: edgeupdate
+        state: started
+        start_mode: auto
+
+    - name: Edge Update Service (Medium) starten
+      ansible.windows.win_service:
+        name: edgeupdatem
+        state: started
+        start_mode: manual
+
+    - name: Edge Update über Microsoft Edge Update anstoßen
+      ansible.windows.win_shell: |
+        $update = "${env:ProgramFiles(x86)}\Microsoft\EdgeUpdate\MicrosoftEdgeUpdate.exe"
+
+        if (-not (Test-Path $update)) {
+            $update = "${env:ProgramFiles}\Microsoft\EdgeUpdate\MicrosoftEdgeUpdate.exe"
+        }
+
+        if (-not (Test-Path $update)) {
+            throw "MicrosoftEdgeUpdate.exe wurde nicht gefunden."
+        }
+
+        Start-Process `
+          -FilePath $update `
+          -ArgumentList "/silent", "/install", "appguid={56EB18F8-B008-4CBD-B6D2-8C97FE7E9062}" `
+          -Wait
+      register: edge_update
+      changed_when: true
+
+    - name: Auf Aktualisierung warten
+      ansible.windows.win_shell: |
+        Start-Sleep -Seconds 10
+      changed_when: false
+
+    - name: Neue Edge-Version ermitteln
+      ansible.windows.win_shell: |
+        $path = "${env:ProgramFiles(x86)}\Microsoft\Edge\Application\msedge.exe"
+
+        if (-not (Test-Path $path)) {
+            $path = "${env:ProgramFiles}\Microsoft\Edge\Application\msedge.exe"
+        }
+
+        if (Test-Path $path) {
+            (Get-Item $path).VersionInfo.ProductVersion
+        }
+        else {
+            exit 1
+        }
+      register: edge_version_after
+      changed_when: false
+
+    - name: Ergebnis anzeigen
+      ansible.builtin.debug:
+        msg:
+          - "Edge-Version vorher: {{ edge_version_before.stdout | trim }}"
+          - "Edge-Version nachher: {{ edge_version_after.stdout | trim }}"
