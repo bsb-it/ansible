@@ -1,83 +1,12 @@
----
 - name: Microsoft Edge Stable aktualisieren
-  hosts:
-    - all
+  hosts: - all
   gather_facts: false
 
   tasks:
-
-    - name: Installierte Edge-Version ermitteln
+    - name: Edge Stable direkt aktualisieren
       ansible.windows.win_shell: |
-        $paths = @(
-          "${env:ProgramFiles(x86)}\Microsoft\Edge\Application\msedge.exe",
-          "${env:ProgramFiles}\Microsoft\Edge\Application\msedge.exe"
-        )
-
-        $path = $paths | Where-Object { Test-Path $_ } | Select-Object -First 1
-
-        if (-not $path) {
-            throw "Microsoft Edge wurde nicht gefunden."
-        }
-
-        (Get-Item $path).VersionInfo.ProductVersion
-      register: edge_version_before
-      changed_when: false
-
-    - name: Edge Update Task starten
-      ansible.windows.win_shell: |
-        Start-ScheduledTask -TaskName "MicrosoftEdgeUpdateTaskMachineUA"
+        Start-Process `
+          -FilePath "C:\Program Files (x86)\Microsoft\EdgeUpdate\MicrosoftEdgeUpdate.exe" `
+          -ArgumentList "/silent /install appguid={56EB18F8-B008-4CBD-B6D2-8C97FE7E9062}&appname=Microsoft%20Edge&needsadmin=True" `
+          -Wait
       changed_when: true
-
-    - name: Auf Edge-Update warten
-      ansible.windows.win_shell: |
-        $timeout = 300
-        $interval = 10
-        $elapsed = 0
-
-        while ($elapsed -lt $timeout) {
-            Start-Sleep -Seconds $interval
-            $elapsed += $interval
-
-            $path1 = "${env:ProgramFiles(x86)}\Microsoft\Edge\Application\msedge.exe"
-            $path2 = "${env:ProgramFiles}\Microsoft\Edge\Application\msedge.exe"
-
-            $path = @($path1, $path2) |
-                Where-Object { Test-Path $_ } |
-                Select-Object -First 1
-
-            if ($path) {
-                $version = (Get-Item $path).VersionInfo.ProductVersion
-
-                if ($version -ne "{{ edge_version_before.stdout | trim }}") {
-                    Write-Output "Neue Edge-Version erkannt: $version"
-                    exit 0
-                }
-            }
-        }
-
-        Write-Output "Innerhalb des Zeitlimits wurde keine neue Edge-Version erkannt."
-      register: edge_update_wait
-      changed_when: false
-
-    - name: Aktuelle Edge-Version ermitteln
-      ansible.windows.win_shell: |
-        $paths = @(
-          "${env:ProgramFiles(x86)}\Microsoft\Edge\Application\msedge.exe",
-          "${env:ProgramFiles}\Microsoft\Edge\Application\msedge.exe"
-        )
-
-        $path = $paths | Where-Object { Test-Path $_ } | Select-Object -First 1
-
-        if (-not $path) {
-            throw "Microsoft Edge wurde nicht gefunden."
-        }
-
-        (Get-Item $path).VersionInfo.ProductVersion
-      register: edge_version_after
-      changed_when: false
-
-    - name: Ergebnis anzeigen
-      ansible.builtin.debug:
-        msg:
-          - "Edge vorher: {{ edge_version_before.stdout | trim }}"
-          - "Edge nachher: {{ edge_version_after.stdout | trim }}"
