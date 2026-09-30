@@ -1,7 +1,6 @@
 ---
 - name: Microsoft Edge Stable aktualisieren
-  hosts:
-    - all
+  hosts: "-all"
   gather_facts: false
 
   tasks:
@@ -23,26 +22,43 @@
       register: edge_version_before
       changed_when: false
 
-    - name: Edge Stable Update anstoßen
+    - name: Edge Update Task starten
       ansible.windows.win_shell: |
         Start-ScheduledTask -TaskName "MicrosoftEdgeUpdateTaskMachineUA"
       changed_when: true
 
-    - name: Auf Abschluss des Edge Update Tasks warten
+    - name: Auf Edge-Update warten
       ansible.windows.win_shell: |
-        $task = Get-ScheduledTaskInfo `
-          -TaskName "MicrosoftEdgeUpdateTaskMachineUA"
+        $timeout = 300
+        $interval = 10
+        $elapsed = 0
 
-        $task.LastRunTime
-      register: edge_task
+        while ($elapsed -lt $timeout) {
+            Start-Sleep -Seconds $interval
+            $elapsed += $interval
+
+            $path1 = "${env:ProgramFiles(x86)}\Microsoft\Edge\Application\msedge.exe"
+            $path2 = "${env:ProgramFiles}\Microsoft\Edge\Application\msedge.exe"
+
+            $path = @($path1, $path2) |
+                Where-Object { Test-Path $_ } |
+                Select-Object -First 1
+
+            if ($path) {
+                $version = (Get-Item $path).VersionInfo.ProductVersion
+
+                if ($version -ne "{{ edge_version_before.stdout | trim }}") {
+                    Write-Output "Neue Edge-Version erkannt: $version"
+                    exit 0
+                }
+            }
+        }
+
+        Write-Output "Innerhalb des Zeitlimits wurde keine neue Edge-Version erkannt."
+      register: edge_update_wait
       changed_when: false
 
-    - name: 30 Sekunden warten
-      ansible.windows.win_shell: |
-        Start-Sleep -Seconds 30
-      changed_when: false
-
-    - name: Edge-Version erneut ermitteln
+    - name: Aktuelle Edge-Version ermitteln
       ansible.windows.win_shell: |
         $paths = @(
           "${env:ProgramFiles(x86)}\Microsoft\Edge\Application\msedge.exe",
